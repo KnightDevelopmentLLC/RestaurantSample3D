@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contact · Aurum Restaurant</title>
+<link rel="stylesheet" href="shared.css" />
+<style>
+/* ── CONTACT LAYOUT ── */
+.contact-section { padding: 5rem 2rem; }
+.contact-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 4rem; align-items: start;
+}
+@media(max-width:768px){ .contact-inner { grid-template-columns: 1fr; gap: 3rem; } }
+
+/* ── INFO SIDE ── */
+.contact-info { display: flex; flex-direction: column; gap: 2rem; }
+.info-block {}
+.info-label {
+  font-size: 0.65rem; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 0.4rem;
+}
+.info-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem; color: var(--cream);
+  line-height: 1.5;
+}
+.info-sub { font-size: 0.78rem; color: var(--text-dim); margin-top: 0.2rem; }
+
+.contact-divider { height: 1px; background: var(--border); }
+
+.wa-big-btn {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 1.2rem 1.5rem;
+  background: #25D366;
+  color: #fff;
+  text-decoration: none;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  border: none; cursor: pointer;
+  transition: all 0.3s;
+}
+.wa-big-btn:hover { background: #1ebe5b; transform: translateY(-2px); }
+.wa-big-btn svg { flex-shrink: 0; }
+
+.hours-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 1.5rem;
+}
+.hour-row {
+  display: flex; justify-content: space-between;
+  font-size: 0.8rem; padding: 0.4rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.hour-day { color: var(--text-dim); }
+.hour-time { color: var(--cream); }
+
+/* ── FORM SIDE ── */
+.contact-form-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 2.5rem;
+}
+.form-title-sm {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem; color: var(--gold);
+  letter-spacing: 0.15em; margin-bottom: 1.8rem;
+  padding-bottom: 1rem; border-bottom: 1px solid var(--border);
+}
+.cf-group { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.2rem; }
+.cf-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim); }
+.cf-input, .cf-textarea {
+  background: var(--deep);
+  border: 1px solid var(--border);
+  color: var(--cream);
+  padding: 0.9rem 1rem;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.85rem;
+  outline: none; width: 100%;
+  transition: border-color 0.3s;
+}
+.cf-input:focus, .cf-textarea:focus { border-color: var(--gold-dim); }
+.cf-textarea { height: 130px; resize: vertical; }
+.cf-input::placeholder, .cf-textarea::placeholder { color: var(--text-dim); }
+
+.cf-submit {
+  width: 100%; padding: 1.1rem;
+  background: var(--gold); color: var(--black);
+  border: none; font-family: 'Cinzel', serif;
+  font-size: 0.8rem; letter-spacing: 0.2em;
+  text-transform: uppercase; cursor: pointer;
+  transition: all 0.3s; margin-top: 0.5rem;
+}
+.cf-submit:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+/* ── MAP ── */
+.map-section { padding: 0 2rem 5rem; }
+.map-inner { max-width: 1100px; margin: 0 auto; }
+.map-title { font-family: 'Cinzel', serif; font-size: 0.85rem; color: var(--gold); letter-spacing: 0.15em; margin-bottom: 1.5rem; }
+.map-wrap {
+  width: 100%; height: 400px;
+  border: 1px solid var(--border);
+  overflow: hidden; position: relative;
+}
+.map-wrap iframe { width: 100%; height: 100%; border: none; filter: grayscale(20%) contrast(1.1); }
+.map-overlay-text {
+  position: absolute; bottom: 1rem; left: 1rem;
+  background: rgba(8,8,8,0.85);
+  border: 1px solid var(--border-bright);
+  padding: 0.8rem 1.2rem;
+  pointer-events: none;
+}
+.map-overlay-text p { font-size: 0.75rem; color: var(--text-dim); }
+.map-overlay-text strong { color: var(--gold); display: block; margin-bottom: 0.2rem; font-family: 'Cinzel', serif; font-size: 0.78rem; letter-spacing: 0.1em; }
+
+/* ── CONFIRM BOX ── */
+.cf-confirm {
+  background: rgba(201,168,76,0.08);
+  border: 1px solid var(--gold-dim);
+  padding: 1rem; margin-top: 1rem;
+  font-size: 0.8rem; color: var(--gold);
+  display: none; text-align: center;
+}
+.cf-confirm.show { display: block; animation: fadeIn 0.4s ease; }
+</style>
+</head>
+<body>
+
+<script src="nav-template.js"></script>
+
+<div class="page-hero">
+  <p class="section-label">Reach Out</p>
+  <h1 class="section-title">Contact Us</h1>
+  <div class="gold-line" style="justify-content:center"><span>✦</span></div>
+  <p style="color:var(--text-dim);font-size:0.85rem;max-width:480px;margin:0 auto">
+    Reservations, private dining enquiries, or just a question — we're here for you.
+  </p>
+</div>
+
+<section class="contact-section">
+  <div class="contact-inner container">
+    <!-- INFO -->
+    <div class="contact-info animate-in">
+      <div class="info-block">
+        <div class="info-label">📍 Location</div>
+        <div class="info-value">12A, Lodhi Colony<br>New Delhi — 110003</div>
+        <p class="info-sub">Valet parking available</p>
+      </div>
+
+      <div class="contact-divider"></div>
+
+      <div class="info-block">
+        <div class="info-label">📞 Phone</div>
+        <div class="info-value"><a href="tel:+919876543210" style="color:var(--cream);text-decoration:none">+91 98765 43210</a></div>
+        <p class="info-sub">Reservations & enquiries</p>
+      </div>
+
+      <div class="info-block">
+        <div class="info-label">✉ Email</div>
+        <div class="info-value"><a href="mailto:info@aurumrestaurant.com" style="color:var(--cream);text-decoration:none">info@aurumrestaurant.com</a></div>
+        <p class="info-sub">We reply within 2 hours</p>
+      </div>
+
+      <div class="contact-divider"></div>
+
+      <div class="info-block">
+        <div class="info-label">🕐 Opening Hours</div>
+        <div class="hours-grid">
+          <div class="hour-row"><span class="hour-day">Monday</span><span class="hour-time">Closed</span></div>
+          <div class="hour-row"><span class="hour-day">Tuesday</span><span class="hour-time">12–3, 7–11</span></div>
+          <div class="hour-row"><span class="hour-day">Wednesday</span><span class="hour-time">12–3, 7–11</span></div>
+          <div class="hour-row"><span class="hour-day">Thursday</span><span class="hour-time">12–3, 7–11</span></div>
+          <div class="hour-row"><span class="hour-day">Friday</span><span class="hour-time">12–3, 7–12</span></div>
+          <div class="hour-row"><span class="hour-day">Saturday</span><span class="hour-time">1–4, 7–12</span></div>
+          <div class="hour-row"><span class="hour-day">Sunday</span><span class="hour-time">1–5, 7–11</span></div>
+        </div>
+      </div>
+
+      <div class="contact-divider"></div>
+
+      <a href="https://wa.me/919876543210?text=Hello%20Aurum!%20I%20would%20like%20to%20make%20a%20reservation." target="_blank" class="wa-big-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        WhatsApp Us Now
+      </a>
+    </div>
+
+    <!-- FORM -->
+    <div class="contact-form-box animate-in">
+      <div class="form-title-sm">SEND US A MESSAGE</div>
+      <div class="cf-group">
+        <label class="cf-label">Full Name *</label>
+        <input class="cf-input" id="cfName" type="text" placeholder="Your name">
+      </div>
+      <div class="cf-group">
+        <label class="cf-label">Email Address *</label>
+        <input class="cf-input" id="cfEmail" type="email" placeholder="your@email.com">
+      </div>
+      <div class="cf-group">
+        <label class="cf-label">Phone</label>
+        <input class="cf-input" id="cfPhone" type="tel" placeholder="+91 XXXXX XXXXX">
+      </div>
+      <div class="cf-group">
+        <label class="cf-label">Subject</label>
+        <input class="cf-input" id="cfSubject" type="text" placeholder="Reservation / Private dining / Other">
+      </div>
+      <div class="cf-group">
+        <label class="cf-label">Message *</label>
+        <textarea class="cf-textarea" id="cfMsg" placeholder="How can we help you?"></textarea>
+      </div>
+      <button class="cf-submit" id="cfSubmit">Send Message</button>
+      <div class="cf-confirm" id="cfConfirm">
+        ✦ Thank you! We'll get back to you within 2 hours.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<section class="map-section">
+  <div class="map-inner">
+    <div class="map-title">FIND US</div>
+    <div class="map-wrap">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3504.2286958!2d77.2167!3d28.5933!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce31d6a7f08f9%3A0x21bb9a91bc1be5b3!2sLodhi%20Colony%2C%20New%20Delhi!5e0!3m2!1sen!2sin!4v1698765432100!5m2!1sen!2sin"
+        allowfullscreen loading="lazy">
+      </iframe>
+      <div class="map-overlay-text">
+        <strong>AURUM RESTAURANT</strong>
+        <p>12A Lodhi Colony, New Delhi</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 Aurum Restaurant · All Rights Reserved</p>
+  <p style="margin-top:0.5rem">Crafted by <a href="https://knightdevelopment.space/" target="_blank">Knight Development</a></p>
+</footer>
+
+<script src="shared.js"></script>
+<script>
+document.getElementById('cfSubmit').addEventListener('click', () => {
+  const name = document.getElementById('cfName').value.trim();
+  const email = document.getElementById('cfEmail').value.trim();
+  const msg = document.getElementById('cfMsg').value.trim();
+  if (!name || !email || !msg) { showToast('Please fill all required fields'); return; }
+  const confirm = document.getElementById('cfConfirm');
+  confirm.classList.add('show');
+  document.getElementById('cfName').value = '';
+  document.getElementById('cfEmail').value = '';
+  document.getElementById('cfPhone').value = '';
+  document.getElementById('cfSubject').value = '';
+  document.getElementById('cfMsg').value = '';
+  setTimeout(() => confirm.classList.remove('show'), 5000);
+});
+</script>
+</body>
+</html>
