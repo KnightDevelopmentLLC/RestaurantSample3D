@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — AURUM Fine Dining</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Page Header ── */
+    .about-hero {
+      height: 100vh; min-height: 550px;
+      display: flex; align-items: center;
+      position: relative; overflow: hidden;
+      background: var(--black);
+    }
+    .about-hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .about-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(5,5,5,0.9) 0%, rgba(5,5,5,0.4) 100%);
+    }
+    .about-hero-content {
+      position: relative; z-index: 10;
+      padding: 0 5vw; max-width: 620px;
+      margin-top: var(--nav-h);
+    }
+
+    /* ── Story ── */
+    .story-sec {
+      padding: 9rem 5vw;
+      display: grid; grid-template-columns: 1fr 1.4fr; gap: 7rem; align-items: center;
+    }
+    @media (max-width: 860px) { .story-sec { grid-template-columns: 1fr; gap: 3.5rem; } }
+    .story-img {
+      position: relative;
+    }
+    .story-img-main {
+      aspect-ratio: 3/4; overflow: hidden;
+    }
+    .story-img-main img { width: 100%; height: 100%; object-fit: cover; }
+    .story-img-accent {
+      position: absolute;
+      width: 60%; aspect-ratio: 4/3;
+      bottom: -2.5rem; right: -2.5rem;
+      overflow: hidden; border: 6px solid var(--black);
+    }
+    .story-img-accent img { width: 100%; height: 100%; object-fit: cover; }
+    @media (max-width: 500px) { .story-img-accent { display: none; } }
+
+    /* ── Values ── */
+    .values-sec {
+      padding: 7rem 5vw;
+      background: linear-gradient(180deg, #0a0804 0%, var(--black) 100%);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px; background: var(--border);
+      margin-top: 4rem;
+    }
+    @media (max-width: 700px) { .values-grid { grid-template-columns: 1fr; } }
+    .value-card {
+      background: var(--card); padding: 3rem 2.5rem;
+      transition: background 0.4s;
+    }
+    .value-card:hover { background: #1a1508; }
+    .value-num {
+      font-family: var(--font-display); font-size: 4rem; font-weight: 300;
+      color: var(--gold); opacity: 0.25; line-height: 1; margin-bottom: 1.5rem;
+    }
+    .value-title {
+      font-family: var(--font-display); font-size: 1.5rem; font-weight: 500;
+      margin-bottom: 1rem;
+    }
+    .value-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.9; }
+
+    /* ── Chefs ── */
+    .chefs-sec { padding: 9rem 5vw; }
+    .chefs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem; margin-top: 4rem;
+    }
+    @media (max-width: 900px) { .chefs-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 550px) { .chefs-grid { grid-template-columns: 1fr; } }
+    .chef-card {
+      position: relative; overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--card);
+      transition: border-color 0.4s, box-shadow 0.4s;
+    }
+    .chef-card:hover {
+      border-color: var(--gold);
+      box-shadow: 0 0 40px rgba(201,168,76,0.1);
+    }
+    .chef-img { aspect-ratio: 3/4; overflow: hidden; position: relative; }
+    .chef-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s var(--ease); }
+    .chef-card:hover .chef-img img { transform: scale(1.06); }
+    .chef-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(0deg, rgba(5,5,5,0.9) 0%, transparent 50%);
+    }
+    .chef-info { padding: 1.8rem 2rem; }
+    .chef-name { font-family: var(--font-display); font-size: 1.5rem; font-weight: 500; }
+    .chef-title { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-top: 0.3rem; }
+    .chef-bio { font-size: 0.78rem; color: var(--muted); margin-top: 1rem; line-height: 1.8; }
+    .chef-specialty {
+      display: inline-block; margin-top: 1rem;
+      font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--black); background: var(--gold);
+      padding: 0.3rem 0.8rem;
+    }
+
+    /* ── Awards ── */
+    .awards-sec {
+      padding: 7rem 5vw;
+      border-top: 1px solid var(--border);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+    }
+    @media (max-width: 760px) { .awards-sec { grid-template-columns: 1fr; gap: 3rem; } }
+    .award-list { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1px; background: var(--border); }
+    .award-item {
+      background: var(--card); padding: 1.5rem 2rem;
+      display: flex; align-items: center; gap: 1.5rem;
+      transition: background 0.3s;
+    }
+    .award-item:hover { background: #161208; }
+    .award-icon { font-size: 1.8rem; flex-shrink: 0; }
+    .award-name { font-family: var(--font-display); font-size: 1.1rem; font-weight: 500; }
+    .award-year { font-size: 0.7rem; color: var(--gold); margin-top: 0.2rem; letter-spacing: 0.1em; }
+    .awards-visual {
+      aspect-ratio: 1; position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #awards-canvas { width: 100% !important; height: 100% !important; }
+  </style>
+</head>
+<body>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<div id="toast"></div>
+
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">AURUM<span> Fine Dining</span></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="menu.html">Menu</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="cart.html" class="nav-cart-btn">Cart <span class="cart-count">0</span></a>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- About Hero -->
+<section class="about-hero">
+  <canvas class="about-hero-canvas" id="about-canvas"></canvas>
+  <div class="about-hero-overlay"></div>
+  <div class="about-hero-content">
+    <p class="hero-label" style="opacity:1;animation:none;">Our Heritage</p>
+    <h1 class="display-heading" style="animation:none;">The Art of <em>Fine</em> Dining</h1>
+    <p style="color:var(--muted);font-size:.85rem;margin-top:1.5rem;letter-spacing:.08em;">Where every detail is deliberate, every flavour a conversation.</p>
+  </div>
+</section>
+
+<!-- Story -->
+<section class="story-sec">
+  <div class="story-img fade-left">
+    <div class="story-img-main">
+      <img src="https://images.unsplash.com/photo-1600565193348-f74bd3960f05?w=600&q=80" alt="Chef at work" loading="lazy"/>
+    </div>
+    <div class="story-img-accent">
+      <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=80" alt="Restaurant interior" loading="lazy"/>
+    </div>
+  </div>
+  <div class="fade-right">
+    <p class="section-label">Our Philosophy</p>
+    <div class="gold-line left"></div>
+    <h2 class="section-heading">Born from a Love of <em>Perfection</em></h2>
+    <p style="color:var(--muted);font-size:.85rem;margin-top:2rem;line-height:2;">
+      AURUM — Latin for gold — was founded in 2018 by Chef Aryan Mehra and restaurateur Kavya Nair
+      with one guiding principle: food is the highest form of art.
+    </p>
+    <p style="color:var(--muted);font-size:.85rem;margin-top:1rem;line-height:2;">
+      Nestled on Marine Drive with sweeping views of the Arabian Sea, our 58-seat dining room is
+      an intimate theatre where classical French technique collides beautifully with India's vibrant pantry.
+      Each menu evolves with the seasons, each dish carries the fingerprint of its creator.
+    </p>
+    <p style="color:var(--muted);font-size:.85rem;margin-top:1rem;line-height:2;">
+      We believe in slowness — slow cooking, slow service, slow conversations. 
+      In a world addicted to speed, AURUM is your permission to linger.
+    </p>
+    <div style="margin-top:2.5rem;">
+      <a href="menu.html" class="btn-primary">Explore Our Menu</a>
+    </div>
+  </div>
+</section>
+
+<!-- Values -->
+<section class="values-sec">
+  <div style="text-align:center;" class="fade-up">
+    <p class="section-label" style="justify-content:center;">What Drives Us</p>
+    <div class="gold-line"></div>
+    <h2 class="section-heading">Our <em>Core Values</em></h2>
+  </div>
+  <div class="values-grid">
+    <div class="value-card fade-up">
+      <div class="value-num">01</div>
+      <div class="value-title">Obsessive Quality</div>
+      <div class="value-desc">Every ingredient passes through 7 quality checkpoints before it reaches our kitchen. We source directly from farms, fisheries, and vineyards we personally visit.</div>
+    </div>
+    <div class="value-card fade-up delay-1">
+      <div class="value-num">02</div>
+      <div class="value-title">Artisanal Craft</div>
+      <div class="value-desc">Our bread is baked fresh each morning. Our butter is churned in-house. Our stocks simmer for 18 hours. There are no shortcuts in a kitchen dedicated to excellence.</div>
+    </div>
+    <div class="value-card fade-up delay-2">
+      <div class="value-num">03</div>
+      <div class="value-title">Warm Hospitality</div>
+      <div class="value-desc">We train our team to anticipate needs before they are spoken. Service at AURUM feels like being cared for by an old friend who happens to know every great wine.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chefs -->
+<section class="chefs-sec">
+  <div class="fade-up" style="text-align:center;">
+    <p class="section-label" style="justify-content:center;">The Creators</p>
+    <div class="gold-line"></div>
+    <h2 class="section-heading">Meet Our <em>Culinary Artists</em></h2>
+  </div>
+  <div class="chefs-grid">
+    <div class="chef-card fade-up">
+      <div class="chef-img">
+        <img src="https://images.unsplash.com/photo-1583394293214-84e53ba5ad37?w=400&q=80" alt="Chef Aryan Mehra" loading="lazy"/>
+        <div class="chef-overlay"></div>
+      </div>
+      <div class="chef-info">
+        <div class="chef-name">Aryan Mehra</div>
+        <div class="chef-title">Executive Chef & Founder</div>
+        <div class="chef-bio">Trained at Le Cordon Bleu Paris and Noma Copenhagen, Aryan returned to India to redefine fine dining through an Indian lens. 18 years of craft in every plate.</div>
+        <div class="chef-specialty">French-Indian Fusion</div>
+      </div>
+    </div>
+    <div class="chef-card fade-up delay-1">
+      <div class="chef-img">
+        <img src="https://images.unsplash.com/photo-1581299894007-aaa50297cf16?w=400&q=80" alt="Chef Priya Anand" loading="lazy"/>
+        <div class="chef-overlay"></div>
+      </div>
+      <div class="chef-info">
+        <div class="chef-name">Priya Anand</div>
+        <div class="chef-title">Pastry Chef</div>
+        <div class="chef-bio">A graduate of Valrhona's chocolate school and Tokyo's Tsuji Institute, Priya's desserts are architectural wonders that taste like fever dreams — in the best possible way.</div>
+        <div class="chef-specialty">Artisanal Patisserie</div>
+      </div>
+    </div>
+    <div class="chef-card fade-up delay-2">
+      <div class="chef-img">
+        <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=400&q=80" alt="Chef Rahul Sinha" loading="lazy"/>
+        <div class="chef-overlay"></div>
+      </div>
+      <div class="chef-info">
+        <div class="chef-name">Rahul Sinha</div>
+        <div class="chef-title">Sous Chef — Seafood</div>
+        <div class="chef-bio">With roots in coastal Goa and training in Tokyo's Tsukiji market, Rahul brings the ocean's depth to every plate — briny, precise, and profoundly respectful of the sea.</div>
+        <div class="chef-specialty">Ocean-to-Table</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Awards -->
+<section class="awards-sec">
+  <div>
+    <p class="section-label fade-up">Recognition</p>
+    <div class="gold-line left"></div>
+    <h2 class="section-heading fade-up">Celebrated <em>Excellence</em></h2>
+    <div class="award-list">
+      <div class="award-item fade-up">
+        <div class="award-icon">🏆</div>
+        <div>
+          <div class="award-name">Best Fine Dining Restaurant</div>
+          <div class="award-year">Times Food Awards · 2024</div>
+        </div>
+      </div>
+      <div class="award-item fade-up delay-1">
+        <div class="award-icon">⭐</div>
+        <div>
+          <div class="award-name">Asia's 50 Best Restaurants</div>
+          <div class="award-year">Listed · 2023 & 2024</div>
+        </div>
+      </div>
+      <div class="award-item fade-up delay-2">
+        <div class="award-icon">🍷</div>
+        <div>
+          <div class="award-name">Wine Spectator Award of Excellence</div>
+          <div class="award-year">Wine Spectator · 2023</div>
+        </div>
+      </div>
+      <div class="award-item fade-up delay-3">
+        <div class="award-icon">✦</div>
+        <div>
+          <div class="award-name">Chef of the Year — Aryan Mehra</div>
+          <div class="award-year">Culinary Institute of India · 2022</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="awards-visual fade-right">
+    <canvas id="awards-canvas"></canvas>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">AURUM</div>
+      <div class="footer-tagline">Fine Dining · Mumbai</div>
+      <p class="footer-desc">Where every evening becomes a story worth telling. Crafted with obsession, served with grace.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Navigation</div>
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="menu.html">Menu</a></li>
+        <li><a href="cart.html">Cart</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Experience</div>
+      <ul class="footer-links">
+        <li><a href="#">Private Dining</a></li>
+        <li><a href="#">Wine Cellar</a></li>
+        <li><a href="#">Chef's Table</a></li>
+        <li><a href="#">Events</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Contact</div>
+      <div class="footer-contact-item"><span class="footer-contact-icon">📍</span><span>14 Marine Drive, Mumbai 400020</span></div>
+      <div class="footer-contact-item"><span class="footer-contact-icon">📞</span><span>+91 98765 43210</span></div>
+      <div class="footer-contact-item"><span class="footer-contact-icon">✉</span><span>hello@aurumfine.in</span></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2025 AURUM Fine Dining. All rights reserved.</p>
+    <p class="footer-credit">Crafted by <a href="https://knightdevelopment.space/" target="_blank" rel="noopener">Knight Development</a></p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="main.js"></script>
+<script>
+// About page hero canvas — flowing ribbons
+(function() {
+  const canvas = document.getElementById('about-canvas');
+  if (!canvas) return;
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(innerWidth, innerHeight);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(70, innerWidth / innerHeight, 0.1, 100);
+  camera.position.z = 6;
+
+  const light1 = new THREE.PointLight(0xc9a84c, 5, 20);
+  light1.position.set(4, 3, 4);
+  scene.add(light1);
+  scene.add(new THREE.AmbientLight(0x0a0804, 2));
+
+  const material = new THREE.MeshStandardMaterial({ color: 0xc9a84c, metalness: 0.95, roughness: 0.08 });
+
+  // Floating rings
+  const rings = [];
+  for (let i = 0; i < 5; i++) {
+    const geo = new THREE.TorusGeometry(1.2 + i * 0.6, 0.02 + i * 0.005, 12, 80);
+    const mesh = new THREE.Mesh(geo, material.clone());
+    mesh.position.set((Math.random()-0.5)*4, (Math.random()-0.5)*3, (Math.random()-0.5)*2);
+    mesh.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, Math.random()*Math.PI);
+    rings.push(mesh);
+    scene.add(mesh);
+  }
+
+  // Particles
+  const pGeo = new THREE.BufferGeometry();
+  const pArr = new Float32Array(800 * 3);
+  for (let i = 0; i < 800; i++) {
+    pArr[i*3]   = (Math.random()-0.5)*20;
+    pArr[i*3+1] = (Math.random()-0.5)*20;
+    pArr[i*3+2] = (Math.random()-0.5)*10;
+  }
+  pGeo.setAttribute('position', new THREE.BufferAttribute(pArr, 3));
+  scene.add(new THREE.Points(pGeo, new THREE.PointsMaterial({ color: 0xc9a84c, size: 0.02, transparent: true, opacity: 0.4 })));
+
+  window.addEventListener('resize', () => {
+    camera.aspect = innerWidth / innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth, innerHeight);
+  });
+
+  const clock = new THREE.Clock();
+  (function animate() {
+    requestAnimationFrame(animate);
+    const t = clock.getElapsedTime();
+    rings.forEach((r, i) => {
+      r.rotation.x += 0.003 * (i % 2 === 0 ? 1 : -1);
+      r.rotation.y += 0.005;
+      r.position.y = Math.sin(t * 0.3 + i) * 0.3;
+    });
+    renderer.render(scene, camera);
+  })();
+})();
+
+// Awards canvas — spinning trophy shape
+(function() {
+  const canvas = document.getElementById('awards-canvas');
+  if (!canvas) return;
+  const w = canvas.parentElement.offsetWidth;
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(w, w);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 100);
+  camera.position.z = 4.5;
+
+  scene.add(new THREE.AmbientLight(0x0a0804, 1));
+  const l1 = new THREE.PointLight(0xc9a84c, 6, 15);
+  l1.position.set(3, 3, 3);
+  scene.add(l1);
+  const l2 = new THREE.PointLight(0x8b6914, 3, 10);
+  l2.position.set(-3, -2, -2);
+  scene.add(l2);
+
+  const mat = new THREE.MeshStandardMaterial({ color: 0xc9a84c, metalness: 1, roughness: 0.05 });
+
+  // Star geometry using merged shapes
+  const starPoints = [];
+  for (let i = 0; i < 10; i++) {
+    const angle = (i / 10) * Math.PI * 2 - Math.PI / 2;
+    const r = i % 2 === 0 ? 1 : 0.45;
+    starPoints.push(new THREE.Vector2(Math.cos(angle) * r, Math.sin(angle) * r));
+  }
+  const starShape = new THREE.Shape(starPoints);
+  const starGeo = new THREE.ExtrudeGeometry(starShape, { depth: 0.18, bevelEnabled: true, bevelThickness: 0.05, bevelSize: 0.05, bevelSegments: 5 });
+  const star = new THREE.Mesh(starGeo, mat);
+  star.position.z = -0.1;
+  scene.add(star);
+
+  // Outer ring
+  const ringGeo = new THREE.TorusGeometry(1.4, 0.06, 16, 80);
+  scene.add(new THREE.Mesh(ringGeo, mat.clone()));
+
+  // Inner decorative rings
+  for (let i = 0; i < 3; i++) {
+    const rg = new THREE.TorusGeometry(0.6 + i * 0.25, 0.015, 8, 60);
+    const rm = new THREE.Mesh(rg, mat.clone());
+    rm.rotation.x = Math.PI / 2;
+    rm.position.z = -0.15 + i * 0.15;
+    scene.add(rm);
+  }
+
+  const clock = new THREE.Clock();
+  (function animate() {
+    requestAnimationFrame(animate);
+    const t = clock.getElapsedTime();
+    star.rotation.z = t * 0.3;
+    l1.intensity = 5 + Math.sin(t * 1.8) * 2;
+    renderer.render(scene, camera);
+  })();
+})();
+</script>
+</body>
+</html>
