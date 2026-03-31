@@ -1,650 +1,444 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AURUM — A Fine Dining Experience</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    /* ── Hero ── */
-    #hero {
-      position: relative; width: 100%; height: 100svh;
-      display: flex; align-items: center;
-      overflow: hidden; background: var(--black);
-    }
-    #hero-canvas {
-      position: absolute; inset: 0; width: 100%; height: 100%;
-    }
-    .hero-content {
-      position: relative; z-index: 10;
-      padding: 0 5vw;
-      max-width: 680px;
-    }
-    .hero-label {
-      font-size: 0.65rem; font-weight: 500; letter-spacing: 0.4em;
-      text-transform: uppercase; color: var(--gold);
-      display: flex; align-items: center; gap: 1rem;
-      margin-bottom: 2rem;
-      opacity: 0; animation: fadeIn 1s 0.5s forwards;
-    }
-    .hero-label::before {
-      content: ''; width: 40px; height: 1px; background: var(--gold);
-    }
-    .hero-title {
-      font-family: var(--font-display);
-      font-size: clamp(3.2rem, 7vw, 6.5rem);
-      font-weight: 300; line-height: 1.05;
-      letter-spacing: 0.02em;
-      opacity: 0; animation: slideUp 1.1s 0.7s var(--ease) forwards;
-    }
-    .hero-title em { font-style: italic; color: var(--gold); display: block; }
-    .hero-sub {
-      font-size: 0.85rem; font-weight: 300;
-      letter-spacing: 0.12em; color: var(--muted);
-      margin: 1.8rem 0 3rem;
-      opacity: 0; animation: fadeIn 1s 1.1s forwards;
-    }
-    .hero-cta {
-      display: flex; gap: 1.5rem; flex-wrap: wrap;
-      opacity: 0; animation: fadeIn 1s 1.4s forwards;
-    }
-    .hero-scroll {
-      position: absolute; bottom: 2.5rem; left: 50%;
-      transform: translateX(-50%);
-      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
-      font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted);
-      z-index: 10;
-      animation: bounce 2s infinite;
-    }
-    .hero-scroll::after {
-      content: ''; width: 1px; height: 45px;
-      background: linear-gradient(to bottom, var(--gold), transparent);
-    }
-    .hero-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(105deg, rgba(5,5,5,0.85) 0%, rgba(5,5,5,0.3) 60%, transparent 100%);
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aurum · Luxury Dining</title>
+<link rel="stylesheet" href="shared.css" />
+<style>
+/* ── HERO ── */
+#hero {
+  position: relative;
+  width: 100%; height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+#hero-canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+}
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 60%, transparent 0%, rgba(8,8,8,0.55) 60%, rgba(8,8,8,0.95) 100%);
+  z-index: 1;
+}
+.hero-content {
+  position: relative; z-index: 2;
+  text-align: center;
+  padding: 0 1.5rem;
+  animation: fadeUp 1.2s ease both;
+}
+.hero-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+  animation: fadeUp 1s 0.2s both;
+}
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  font-weight: 300;
+  color: var(--cream);
+  line-height: 1.05;
+  margin-bottom: 0.3rem;
+  animation: fadeUp 1s 0.35s both;
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--gold);
+  display: block;
+}
+.hero-sub {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  letter-spacing: 0.15em;
+  margin: 1.5rem 0 2.5rem;
+  animation: fadeUp 1s 0.5s both;
+}
+.hero-cta {
+  display: inline-flex; gap: 1.2rem;
+  animation: fadeUp 1s 0.65s both;
+}
+.btn-outline {
+  padding: 0.9rem 2.5rem;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  background: transparent;
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.btn-outline:hover { background: var(--gold); color: var(--black); }
+.btn-solid {
+  padding: 0.9rem 2.5rem;
+  background: var(--gold);
+  color: var(--black);
+  border: 1px solid var(--gold);
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.btn-solid:hover { background: var(--gold-light); }
 
-    @keyframes fadeIn { to { opacity: 1; } }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes bounce {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(8px); }
-    }
+.hero-scroll-hint {
+  position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  z-index: 2;
+  display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+  color: var(--text-dim); font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase;
+  animation: fadeIn 2s 1.5s both;
+}
+.scroll-line {
+  width: 1px; height: 50px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: scrollPulse 2s infinite;
+}
+@keyframes scrollPulse {
+  0%,100% { opacity: 0.3; transform: scaleY(0.8); }
+  50% { opacity: 1; transform: scaleY(1); }
+}
 
-    /* ── Music Toggle ── */
-    #music-btn {
-      position: fixed; bottom: 2rem; left: 2rem; z-index: 500;
-      width: 44px; height: 44px; border-radius: 50%;
-      border: 1px solid var(--border);
-      background: rgba(5,5,5,0.85);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--gold); font-size: 1rem;
-      backdrop-filter: blur(10px);
-      transition: all 0.3s;
-    }
-    #music-btn:hover { border-color: var(--gold); box-shadow: 0 0 20px var(--glow); }
-    #music-btn .bar {
-      display: flex; gap: 2px; align-items: flex-end; height: 16px;
-    }
-    #music-btn .bar span {
-      display: block; width: 3px; background: var(--gold); border-radius: 2px;
-      animation: barAnim 0.8s ease-in-out infinite alternate;
-    }
-    #music-btn .bar span:nth-child(1) { height: 6px; animation-delay: 0s; }
-    #music-btn .bar span:nth-child(2) { height: 12px; animation-delay: 0.15s; }
-    #music-btn .bar span:nth-child(3) { height: 8px; animation-delay: 0.3s; }
-    #music-btn .bar span:nth-child(4) { height: 14px; animation-delay: 0.1s; }
-    #music-btn.paused .bar span { animation-play-state: paused; }
-    @keyframes barAnim { from { transform: scaleY(0.4); } to { transform: scaleY(1); } }
+/* ── FEATURES ── */
+.features-section { padding: 5rem 2rem; background: var(--deep); }
+.features-grid {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+}
+.feature-card {
+  padding: 2.5rem 1.5rem;
+  border: 1px solid var(--border);
+  background: var(--card);
+  position: relative;
+  transition: border-color 0.4s, transform 0.4s;
+}
+.feature-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 40px; height: 2px;
+  background: var(--gold);
+  transition: width 0.4s;
+}
+.feature-card:hover { border-color: var(--border-bright); transform: translateY(-4px); }
+.feature-card:hover::before { width: 100%; }
+.feature-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+.feature-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  color: var(--gold);
+  letter-spacing: 0.12em;
+  margin-bottom: 0.6rem;
+}
+.feature-desc { font-size: 0.82rem; color: var(--text-dim); line-height: 1.6; }
 
-    /* ── Features Strip ── */
-    .features-strip {
-      padding: 4rem 5vw;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0;
-    }
-    @media (max-width: 700px) { .features-strip { grid-template-columns: 1fr 1fr; } }
-    .feature-item {
-      padding: 2rem 2.5rem;
-      border-right: 1px solid var(--border);
-      text-align: center;
-    }
-    .feature-item:last-child { border-right: none; }
-    @media (max-width: 700px) {
-      .feature-item:nth-child(2) { border-right: none; }
-      .feature-item:nth-child(3) { border-top: 1px solid var(--border); border-right: 1px solid var(--border); }
-      .feature-item:nth-child(4) { border-top: 1px solid var(--border); border-right: none; }
-    }
-    .feature-icon { font-size: 1.6rem; margin-bottom: 1rem; }
-    .feature-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 500; color: var(--gold); }
-    .feature-desc { font-size: 0.75rem; color: var(--muted); margin-top: 0.4rem; letter-spacing: 0.05em; }
+/* ── FEATURED DISHES ── */
+.featured-section { padding: 6rem 2rem; }
+.featured-header { text-align: center; margin-bottom: 3.5rem; }
+.dishes-grid {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+.dish-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  transition: border-color 0.4s, transform 0.4s;
+  cursor: pointer;
+}
+.dish-card:hover { border-color: var(--border-bright); transform: translateY(-6px); }
+.dish-img-wrap {
+  width: 100%; height: 220px; overflow: hidden; position: relative;
+}
+.dish-img-wrap img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.6s;
+}
+.dish-card:hover .dish-img-wrap img { transform: scale(1.06); }
+.dish-tag {
+  position: absolute; top: 1rem; left: 1rem;
+  background: rgba(8,8,8,0.85);
+  border: 1px solid var(--border-bright);
+  color: var(--gold);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+}
+.dish-body { padding: 1.5rem; }
+.dish-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  color: var(--cream); margin-bottom: 0.3rem;
+}
+.dish-desc { font-size: 0.78rem; color: var(--text-dim); margin-bottom: 1rem; line-height: 1.5; }
+.dish-footer { display: flex; align-items: center; justify-content: space-between; }
+.dish-price { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--gold); }
+.dish-add-btn {
+  padding: 0.5rem 1.1rem;
+  background: transparent;
+  border: 1px solid var(--border-bright);
+  color: var(--gold);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  font-family: 'Jost', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.dish-add-btn:hover { background: var(--gold); color: var(--black); }
 
-    /* ── About Section ── */
-    .about-sec {
-      padding: 9rem 5vw;
-      display: grid; grid-template-columns: 1fr 1fr; gap: 6rem;
-      align-items: center;
-    }
-    @media (max-width: 860px) { .about-sec { grid-template-columns: 1fr; gap: 3rem; } }
-    .about-img-wrap {
-      position: relative; aspect-ratio: 3/4;
-      overflow: hidden;
-    }
-    .about-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 6s var(--ease); }
-    .about-img-wrap:hover img { transform: scale(1.06); }
-    .about-img-border {
-      position: absolute; inset: 14px; border: 1px solid var(--border);
-      pointer-events: none; z-index: 2;
-    }
-    .about-img-label {
-      position: absolute; bottom: -1px; right: -1px;
-      background: var(--gold); color: var(--black);
-      font-size: 0.65rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
-      padding: 0.6rem 1.2rem;
-      z-index: 3;
-    }
-    .about-text { padding: 1rem 0; }
-    .about-stats {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
-      margin: 3rem 0;
-    }
-    .stat-num {
-      font-family: var(--font-display); font-size: 3rem; font-weight: 300; color: var(--gold);
-      line-height: 1;
-    }
-    .stat-label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-top: 0.3rem; }
-
-    /* ── Menu Preview ── */
-    .menu-preview {
-      padding: 7rem 5vw;
-      background: linear-gradient(180deg, var(--black) 0%, #0a0804 100%);
-    }
-    .menu-preview-header {
-      display: flex; align-items: flex-end; justify-content: space-between;
-      margin-bottom: 4rem; flex-wrap: wrap; gap: 1.5rem;
-    }
-    .menu-grid-home {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5px;
-      background: var(--border);
-    }
-    @media (max-width: 700px) { .menu-grid-home { grid-template-columns: 1fr; } }
-    .menu-card-home {
-      background: var(--card);
-      position: relative; overflow: hidden;
-      aspect-ratio: 4/5;
-      display: flex; flex-direction: column;
-      cursor: none;
-      transition: transform 0.4s var(--ease);
-    }
-    .menu-card-home:hover { z-index: 2; transform: scale(1.02); }
-    .menu-card-home img {
-      position: absolute; inset: 0; width: 100%; height: 100%;
-      object-fit: cover;
-      transition: transform 0.7s var(--ease);
-    }
-    .menu-card-home:hover img { transform: scale(1.08); }
-    .menu-card-home-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(0deg, rgba(5,5,5,0.92) 0%, rgba(5,5,5,0.1) 50%, transparent 100%);
-      z-index: 1;
-    }
-    .menu-card-home-content {
-      position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
-      padding: 1.8rem;
-    }
-    .menu-card-home-cat { font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
-    .menu-card-home-name { font-family: var(--font-display); font-size: 1.5rem; font-weight: 400; }
-    .menu-card-home-price { font-size: 0.8rem; color: var(--gold); margin-top: 0.3rem; }
-
-    /* ── Testimonials ── */
-    .testimonials {
-      padding: 8rem 5vw;
-      text-align: center;
-      position: relative; overflow: hidden;
-    }
-    .testimonials::before {
-      content: '❝';
-      position: absolute; top: 5rem; left: 50%;
-      transform: translateX(-50%);
-      font-size: 14rem; line-height: 1;
-      color: var(--gold); opacity: 0.03;
-      font-family: Georgia, serif;
-      pointer-events: none;
-    }
-    .testimonial-slider { max-width: 680px; margin: 4rem auto 0; }
-    .testimonial-text {
-      font-family: var(--font-display); font-size: clamp(1.3rem, 2.5vw, 1.8rem);
-      font-style: italic; font-weight: 300; line-height: 1.5; color: var(--text);
-    }
-    .testimonial-author {
-      margin-top: 2rem;
-      font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold);
-    }
-    .testimonial-dots { display: flex; gap: 0.5rem; justify-content: center; margin-top: 2.5rem; }
-    .testimonial-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--muted); border: none; transition: all 0.3s;
-    }
-    .testimonial-dot.active { background: var(--gold); transform: scale(1.4); }
-
-    /* ── Reservation CTA ── */
-    .reserve-cta {
-      padding: 8rem 5vw;
-      background: linear-gradient(135deg, #0a0804 0%, #0e0b03 100%);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      text-align: center;
-    }
-    .reserve-cta .display-heading { max-width: 700px; margin: 0 auto; }
-  </style>
+/* ── QUOTE BAND ── */
+.quote-band {
+  padding: 5rem 2rem;
+  background: linear-gradient(135deg, var(--brown) 0%, var(--black) 100%);
+  text-align: center;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.quote-band::before {
+  content: '❝';
+  position: absolute; top: -1rem; left: 50%; transform: translateX(-50%);
+  font-size: 8rem; color: rgba(201,168,76,0.05);
+  font-family: serif; line-height: 1; pointer-events: none;
+}
+.quote-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.5rem, 4vw, 2.8rem);
+  font-style: italic;
+  color: var(--cream);
+  max-width: 800px; margin: 0 auto 1rem;
+  line-height: 1.4;
+}
+.quote-author { font-size: 0.75rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); }
+</style>
 </head>
 <body>
 
-<!-- Cursor -->
-<div id="cursor"></div>
-<div id="cursor-ring"></div>
+<script src="nav-template.js"></script>
 
-<!-- Toast -->
-<div id="toast"></div>
-
-<!-- Navbar -->
-<nav id="navbar">
-  <a href="index.html" class="nav-logo">AURUM<span> Fine Dining</span></a>
-  <ul class="nav-links" id="nav-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="about.html">About</a></li>
-    <li><a href="menu.html">Menu</a></li>
-    <li><a href="contact.html">Contact</a></li>
-  </ul>
-  <a href="cart.html" class="nav-cart-btn">
-    Cart <span class="cart-count">0</span>
-  </a>
-  <button class="hamburger" id="hamburger" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
-
-<!-- Hero -->
+<!-- HERO -->
 <section id="hero">
   <canvas id="hero-canvas"></canvas>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <p class="hero-label">Est. 2018 · Mumbai, India</p>
+    <p class="hero-label">Est. 2018 · New Delhi</p>
     <h1 class="hero-title">
-      A Fine Dining<br><em>Experience</em>
+      Luxury Dining
+      <em>Experience</em>
     </h1>
-    <p class="hero-sub">Crafted with passion, served with elegance</p>
+    <p class="hero-sub">Where every plate tells a story of craft and passion</p>
     <div class="hero-cta">
-      <a href="menu.html" class="btn-gold">Explore Menu</a>
-      <a href="about.html" class="btn-primary">Our Story</a>
+      <a href="menu.html" class="btn-solid">Explore Menu</a>
+      <a href="about.html" class="btn-outline">Our Story</a>
     </div>
   </div>
-  <div class="hero-scroll">Scroll</div>
+  <div class="hero-scroll-hint">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
 </section>
 
-<!-- Features Strip -->
-<div class="features-strip">
-  <div class="feature-item fade-up">
-    <div class="feature-icon">🍷</div>
-    <div class="feature-title">Curated Wine</div>
-    <div class="feature-desc">200+ labels from around the world</div>
+<!-- FEATURES -->
+<section class="features-section">
+  <div class="features-grid">
+    <div class="feature-card animate-in">
+      <div class="feature-icon">🍷</div>
+      <div class="feature-title">Curated Wine List</div>
+      <p class="feature-desc">Over 120 labels from France, Italy, and Napa Valley, each paired to perfection.</p>
+    </div>
+    <div class="feature-card animate-in">
+      <div class="feature-icon">👨‍🍳</div>
+      <div class="feature-title">Michelin-Trained Chefs</div>
+      <p class="feature-desc">Our brigade has honed their craft at acclaimed kitchens across three continents.</p>
+    </div>
+    <div class="feature-card animate-in">
+      <div class="feature-icon">🌿</div>
+      <div class="feature-title">Farm-to-Table</div>
+      <p class="feature-desc">Seasonal produce sourced within 100 km, delivered fresh every morning.</p>
+    </div>
+    <div class="feature-card animate-in">
+      <div class="feature-icon">✨</div>
+      <div class="feature-title">Private Dining</div>
+      <p class="feature-desc">Bespoke experiences for intimate gatherings and corporate celebrations.</p>
+    </div>
   </div>
-  <div class="feature-item fade-up delay-1">
-    <div class="feature-icon">👨‍🍳</div>
-    <div class="feature-title">Master Chefs</div>
-    <div class="feature-desc">Michelin-trained culinary team</div>
+</section>
+
+<!-- FEATURED DISHES -->
+<section class="featured-section">
+  <div class="featured-header">
+    <p class="section-label">Signature Selections</p>
+    <h2 class="section-title">Chef's Recommendations</h2>
+    <div class="gold-line"><span>✦</span></div>
   </div>
-  <div class="feature-item fade-up delay-2">
-    <div class="feature-icon">🌿</div>
-    <div class="feature-title">Farm Fresh</div>
-    <div class="feature-desc">Ingredients sourced daily</div>
-  </div>
-  <div class="feature-item fade-up delay-3">
-    <div class="feature-icon">✦</div>
-    <div class="feature-title">Private Dining</div>
-    <div class="feature-desc">Intimate rooms for special occasions</div>
-  </div>
+  <div class="dishes-grid" id="featuredDishes"></div>
+</section>
+
+<!-- QUOTE -->
+<div class="quote-band">
+  <p class="quote-text animate-in">"Dining is and always was a great artistic opportunity."</p>
+  <p class="quote-author animate-in">— Frank Lloyd Wright</p>
 </div>
 
-<!-- About Section -->
-<section class="about-sec">
-  <div class="about-img-wrap fade-left">
-    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80" alt="Fine dining ambiance" loading="lazy" />
-    <div class="about-img-border"></div>
-    <div class="about-img-label">Since 2018</div>
-  </div>
-  <div class="about-text fade-right">
-    <p class="section-label">Our Story</p>
-    <div class="gold-line left"></div>
-    <h2 class="section-heading">Where Art Meets <em>Cuisine</em></h2>
-    <p style="color:var(--muted);font-size:.85rem;margin-top:1.5rem;line-height:1.9;">
-      AURUM was born from a singular obsession — to craft moments so extraordinary they become memories. 
-      Nestled in the heart of Mumbai, our kitchen is a sanctuary where classical techniques 
-      meet avant-garde vision.
-    </p>
-    <p style="color:var(--muted);font-size:.85rem;margin-top:1rem;line-height:1.9;">
-      Each dish is a narrative — told through the finest seasonal ingredients, 
-      presented with gallery-worthy precision, and delivered with warmth that feels like home.
-    </p>
-    <div class="about-stats">
-      <div>
-        <div class="stat-num">12+</div>
-        <div class="stat-label">Years of Excellence</div>
-      </div>
-      <div>
-        <div class="stat-num">4</div>
-        <div class="stat-label">Awards Won</div>
-      </div>
-      <div>
-        <div class="stat-num">30K+</div>
-        <div class="stat-label">Happy Guests</div>
-      </div>
-      <div>
-        <div class="stat-num">18</div>
-        <div class="stat-label">Signature Dishes</div>
-      </div>
-    </div>
-    <a href="about.html" class="btn-primary">Discover More</a>
-  </div>
-</section>
-
-<!-- Menu Preview -->
-<section class="menu-preview">
-  <div class="menu-preview-header">
-    <div class="fade-up">
-      <p class="section-label">Culinary Journey</p>
-      <div class="gold-line left"></div>
-      <h2 class="section-heading">Our <em>Signature</em> Selection</h2>
-    </div>
-    <a href="menu.html" class="btn-primary fade-up delay-2">View Full Menu</a>
-  </div>
-  <div class="menu-grid-home">
-    <div class="menu-card-home fade-up">
-      <img src="https://images.unsplash.com/photo-1559847844-5315695dadae?w=500&q=80" alt="Truffle Risotto" loading="lazy" />
-      <div class="menu-card-home-overlay"></div>
-      <div class="menu-card-home-content">
-        <div class="menu-card-home-cat">Main Course</div>
-        <div class="menu-card-home-name">Black Truffle Risotto</div>
-        <div class="menu-card-home-price">₹2,400</div>
-      </div>
-    </div>
-    <div class="menu-card-home fade-up delay-1">
-      <img src="https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=500&q=80" alt="Lobster" loading="lazy" />
-      <div class="menu-card-home-overlay"></div>
-      <div class="menu-card-home-content">
-        <div class="menu-card-home-cat">Seafood</div>
-        <div class="menu-card-home-name">Seared Lobster Thermidor</div>
-        <div class="menu-card-home-price">₹3,800</div>
-      </div>
-    </div>
-    <div class="menu-card-home fade-up delay-2">
-      <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=500&q=80" alt="Dessert" loading="lazy" />
-      <div class="menu-card-home-overlay"></div>
-      <div class="menu-card-home-content">
-        <div class="menu-card-home-cat">Dessert</div>
-        <div class="menu-card-home-name">Gold Leaf Crème Brûlée</div>
-        <div class="menu-card-home-price">₹950</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Testimonials -->
-<section class="testimonials">
-  <p class="section-label" style="justify-content:center;">What Guests Say</p>
-  <div class="gold-line"></div>
-  <h2 class="section-heading fade-up">Stories of <em>Delight</em></h2>
-  <div class="testimonial-slider">
-    <p class="testimonial-text" id="testimonial-text">
-      "An experience that transcends dining. Every bite was a revelation, every moment a memory. AURUM is not just a restaurant — it's a destination."
-    </p>
-    <p class="testimonial-author" id="testimonial-author">— Priya Sharma · Mumbai</p>
-    <div class="testimonial-dots">
-      <button class="testimonial-dot active" onclick="setTestimonial(0)"></button>
-      <button class="testimonial-dot" onclick="setTestimonial(1)"></button>
-      <button class="testimonial-dot" onclick="setTestimonial(2)"></button>
-    </div>
-  </div>
-</section>
-
-<!-- Reserve CTA -->
-<section class="reserve-cta">
-  <div class="fade-up">
-    <p class="section-label" style="justify-content:center;">Reserve Your Table</p>
-    <div class="gold-line"></div>
-    <h2 class="display-heading">Begin Your <em>Journey</em></h2>
-    <p style="color:var(--muted);font-size:.85rem;margin:1.5rem auto 3rem;max-width:480px;letter-spacing:.06em;">
-      Let us curate an evening you'll treasure forever. <br>Available nightly from 7 PM to midnight.
-    </p>
-    <a href="contact.html" class="btn-gold">Reserve a Table</a>
-  </div>
-</section>
-
-<!-- Footer -->
 <footer>
-  <div class="footer-grid">
-    <div>
-      <div class="footer-brand-name">AURUM</div>
-      <div class="footer-tagline">Fine Dining · Mumbai</div>
-      <p class="footer-desc">Where every evening becomes a story worth telling. Crafted with obsession, served with grace.</p>
-      <div class="footer-socials" style="margin-top:1.5rem;">
-        <a href="#" class="footer-social">in</a>
-        <a href="#" class="footer-social">tw</a>
-        <a href="#" class="footer-social">ig</a>
-      </div>
-    </div>
-    <div>
-      <div class="footer-col-title">Navigation</div>
-      <ul class="footer-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="menu.html">Menu</a></li>
-        <li><a href="cart.html">Cart</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </div>
-    <div>
-      <div class="footer-col-title">Experience</div>
-      <ul class="footer-links">
-        <li><a href="#">Private Dining</a></li>
-        <li><a href="#">Wine Cellar</a></li>
-        <li><a href="#">Chef's Table</a></li>
-        <li><a href="#">Events</a></li>
-        <li><a href="#">Gift Cards</a></li>
-      </ul>
-    </div>
-    <div>
-      <div class="footer-col-title">Contact</div>
-      <div class="footer-contact-item">
-        <span class="footer-contact-icon">📍</span>
-        <span>14 Marine Drive, Nariman Point, Mumbai 400020</span>
-      </div>
-      <div class="footer-contact-item">
-        <span class="footer-contact-icon">📞</span>
-        <span>+91 98765 43210</span>
-      </div>
-      <div class="footer-contact-item">
-        <span class="footer-contact-icon">✉</span>
-        <span>hello@aurumfine.in</span>
-      </div>
-      <div class="footer-contact-item">
-        <span class="footer-contact-icon">🕐</span>
-        <span>Daily · 7 PM – 12 AM</span>
-      </div>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p class="footer-copy">© 2025 AURUM Fine Dining. All rights reserved.</p>
-    <p class="footer-credit">Crafted by <a href="https://knightdevelopment.space/" target="_blank" rel="noopener">Knight Development</a></p>
-  </div>
+  <p>© 2025 Aurum Restaurant · All Rights Reserved</p>
+  <p style="margin-top:0.5rem">Crafted by <a href="https://knightdevelopment.space/" target="_blank">Knight Development</a></p>
 </footer>
 
-<!-- Music -->
-<button id="music-btn" class="paused" aria-label="Toggle music" title="Toggle ambient music">
-  <div class="bar"><span></span><span></span><span></span><span></span></div>
-</button>
-
+<!-- THREE.JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="main.js"></script>
+<script src="shared.js"></script>
 <script>
-// ── Three.js Hero ──
-(function() {
+// ── HERO 3D ──────────────────────────────────────────
+(function () {
+  const isMobile = window.innerWidth < 768;
+  if (isMobile) {
+    // Simple CSS background for mobile
+    document.getElementById('hero').style.background =
+      'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(42,31,14,0.9) 0%, rgba(8,8,8,1) 100%)';
+    return;
+  }
+
   const canvas = document.getElementById('hero-canvas');
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  renderer.setSize(innerWidth, innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x000000, 0);
 
-  const scene  = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 100);
-  camera.position.set(0, 0, 5);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera.position.set(0, 0, 6);
 
   // Lights
-  const ambLight = new THREE.AmbientLight(0x1a0f00, 1.2);
-  scene.add(ambLight);
-  const goldLight = new THREE.PointLight(0xc9a84c, 4, 20);
-  goldLight.position.set(3, 2, 3);
-  scene.add(goldLight);
-  const rimLight = new THREE.PointLight(0x8b6914, 2, 15);
-  rimLight.position.set(-4, -1, -2);
-  scene.add(rimLight);
+  const ambientLight = new THREE.AmbientLight(0x3d2a0a, 1.5);
+  scene.add(ambientLight);
+  const pointLight = new THREE.PointLight(0xc9a84c, 2, 20);
+  pointLight.position.set(3, 4, 3);
+  scene.add(pointLight);
+  const pointLight2 = new THREE.PointLight(0xfff4e0, 0.5, 20);
+  pointLight2.position.set(-3, -2, 2);
+  scene.add(pointLight2);
 
-  // Central golden orb / ring sculpture
-  const torusGeo   = new THREE.TorusGeometry(1.2, 0.04, 16, 100);
-  const torusMat   = new THREE.MeshStandardMaterial({ color: 0xc9a84c, metalness: 1, roughness: 0.1 });
-  const torus       = new THREE.Mesh(torusGeo, torusMat);
-  scene.add(torus);
+  // Gold material
+  const goldMat = new THREE.MeshStandardMaterial({
+    color: 0xc9a84c,
+    metalness: 0.95,
+    roughness: 0.15,
+    envMapIntensity: 1.5,
+  });
+  const darkMat = new THREE.MeshStandardMaterial({
+    color: 0x1a1208,
+    metalness: 0.9,
+    roughness: 0.2,
+  });
 
-  const torus2Geo = new THREE.TorusGeometry(0.9, 0.03, 16, 100);
-  const torus2    = new THREE.Mesh(torus2Geo, torusMat.clone());
-  torus2.rotation.x = Math.PI / 3;
-  scene.add(torus2);
+  // Plate base
+  const plateGeom = new THREE.CylinderGeometry(1.6, 1.4, 0.1, 64);
+  const plate = new THREE.Mesh(plateGeom, darkMat);
+  scene.add(plate);
 
-  const torus3Geo = new THREE.TorusGeometry(1.5, 0.025, 16, 100);
-  const torus3    = new THREE.Mesh(torus3Geo, torusMat.clone());
-  torus3.rotation.y = Math.PI / 4;
-  scene.add(torus3);
+  // Plate rim ring
+  const rimGeom = new THREE.TorusGeometry(1.55, 0.06, 16, 80);
+  const rim = new THREE.Mesh(rimGeom, goldMat);
+  rim.rotation.x = Math.PI / 2;
+  rim.position.y = 0.05;
+  scene.add(rim);
 
-  // Core sphere
-  const sphereGeo = new THREE.IcosahedronGeometry(0.55, 4);
-  const sphereMat = new THREE.MeshStandardMaterial({ color: 0x8b6914, metalness: 1, roughness: 0.05, wireframe: false });
-  const sphere    = new THREE.Mesh(sphereGeo, sphereMat);
-  scene.add(sphere);
+  // Inner ring decoration
+  const innerRimGeom = new THREE.TorusGeometry(1.0, 0.025, 12, 60);
+  const innerRim = new THREE.Mesh(innerRimGeom, goldMat);
+  innerRim.rotation.x = Math.PI / 2;
+  innerRim.position.y = 0.06;
+  scene.add(innerRim);
 
-  // Particles
-  const pCount  = window.innerWidth < 600 ? 600 : 1400;
-  const pGeo    = new THREE.BufferGeometry();
-  const pPos    = new Float32Array(pCount * 3);
-  const pSizes  = new Float32Array(pCount);
-  for (let i = 0; i < pCount; i++) {
-    const r = 3 + Math.random() * 5;
-    const theta = Math.random() * Math.PI * 2;
-    const phi   = Math.acos(2 * Math.random() - 1);
-    pPos[i*3]   = r * Math.sin(phi) * Math.cos(theta);
-    pPos[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
-    pPos[i*3+2] = r * Math.cos(phi);
-    pSizes[i] = Math.random() * 3 + 0.5;
+  // Dome / cloche
+  const domeGeom = new THREE.SphereGeometry(1.1, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2);
+  const dome = new THREE.Mesh(domeGeom, new THREE.MeshStandardMaterial({
+    color: 0x1a1208, metalness: 0.95, roughness: 0.1,
+  }));
+  dome.position.y = 0.08;
+  scene.add(dome);
+
+  // Dome handle knob
+  const knobGeom = new THREE.SphereGeometry(0.12, 16, 16);
+  const knob = new THREE.Mesh(knobGeom, goldMat);
+  knob.position.y = 1.2;
+  scene.add(knob);
+
+  // Floating gold particles
+  const particleCount = 60;
+  const pGeo = new THREE.BufferGeometry();
+  const positions = new Float32Array(particleCount * 3);
+  for (let i = 0; i < particleCount; i++) {
+    positions[i * 3] = (Math.random() - 0.5) * 8;
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 6;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 4 - 1;
   }
-  pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-  pGeo.setAttribute('size',     new THREE.BufferAttribute(pSizes, 1));
-  const pMat = new THREE.PointsMaterial({ color: 0xc9a84c, size: 0.025, sizeAttenuation: true, transparent: true, opacity: 0.55 });
+  pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  const pMat = new THREE.PointsMaterial({ color: 0xc9a84c, size: 0.03, transparent: true, opacity: 0.5 });
   const particles = new THREE.Points(pGeo, pMat);
   scene.add(particles);
 
-  // Mouse parallax
-  let mx = 0, my = 0;
-  document.addEventListener('mousemove', e => {
-    mx = (e.clientX / innerWidth  - 0.5) * 2;
-    my = (e.clientY / innerHeight - 0.5) * 2;
-  });
-
-  // Resize
-  window.addEventListener('resize', () => {
-    camera.aspect = innerWidth / innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(innerWidth, innerHeight);
-  });
+  // Group everything
+  const group = new THREE.Group();
+  group.add(plate, rim, innerRim, dome, knob);
+  scene.add(group);
 
   // Animate
-  const clock = new THREE.Clock();
-  (function animate() {
+  let t = 0;
+  function animate() {
     requestAnimationFrame(animate);
-    const t = clock.getElapsedTime();
-
-    torus.rotation.x  = t * 0.28;
-    torus.rotation.y  = t * 0.15;
-    torus2.rotation.x = t * 0.18 + 1;
-    torus2.rotation.z = t * 0.22;
-    torus3.rotation.y = t * 0.1;
-    torus3.rotation.z = t * 0.14;
-    sphere.rotation.y = t * 0.4;
-
-    particles.rotation.y = t * 0.04;
-    particles.rotation.x = t * 0.015;
-
-    // Camera parallax
-    camera.position.x += (mx * 0.8 - camera.position.x) * 0.03;
-    camera.position.y += (-my * 0.5 - camera.position.y) * 0.03;
-    camera.lookAt(scene.position);
-
-    // Pulsing light
-    goldLight.intensity = 3.5 + Math.sin(t * 1.5) * 1;
-
+    t += 0.005;
+    group.rotation.y = t * 0.4;
+    group.position.y = Math.sin(t * 0.7) * 0.12;
+    particles.rotation.y = t * 0.05;
+    particles.rotation.x = t * 0.02;
     renderer.render(scene, camera);
-  })();
-})();
+  }
+  animate();
 
-// ── Testimonials ──
-const testimonials = [
-  { text: '"An experience that transcends dining. Every bite was a revelation, every moment a memory. AURUM is not just a restaurant — it\'s a destination."', author: '— Priya Sharma · Mumbai' },
-  { text: '"The truffle risotto alone is worth the journey. Chef Aryan\'s mastery is evident in every dish. A true masterpiece of culinary artistry."', author: '— Rohan Kapoor · Delhi' },
-  { text: '"From the moment we stepped in, we felt royalty. The ambiance, the food, the service — nothing short of perfection. Our anniversary will never be forgotten."', author: '— Ananya & Vikram · Pune' },
-];
-let currentT = 0, tTimer;
-function setTestimonial(i) {
-  currentT = i;
-  document.getElementById('testimonial-text').textContent = testimonials[i].text;
-  document.getElementById('testimonial-author').textContent = testimonials[i].author;
-  document.querySelectorAll('.testimonial-dot').forEach((d, j) => d.classList.toggle('active', j === i));
-  clearInterval(tTimer);
-  tTimer = setInterval(() => setTestimonial((currentT + 1) % testimonials.length), 5000);
-}
-tTimer = setInterval(() => setTestimonial((currentT + 1) % testimonials.length), 5000);
-
-// ── Music ──
-(function() {
-  const btn = document.getElementById('music-btn');
-  // Create a simple ambient tone via Web Audio API
-  let ctx, gain, osc1, osc2, playing = false;
-  btn.addEventListener('click', () => {
-    if (!ctx) {
-      ctx  = new (window.AudioContext || window.webkitAudioContext)();
-      gain = ctx.createGain(); gain.gain.value = 0.04; gain.connect(ctx.destination);
-      // Pad: slow oscillators
-      [55, 82.4, 110, 164.8, 220].forEach((freq, i) => {
-        const o = ctx.createOscillator();
-        const g = ctx.createGain();
-        o.type = 'sine'; o.frequency.value = freq;
-        g.gain.value = 0.15 / (i + 1);
-        o.connect(g); g.connect(gain);
-        o.start();
-      });
-      playing = true;
-    } else if (playing) {
-      gain.gain.setTargetAtTime(0, ctx.currentTime, 0.5);
-      playing = false;
-    } else {
-      gain.gain.setTargetAtTime(0.04, ctx.currentTime, 0.5);
-      playing = true;
-    }
-    btn.classList.toggle('paused', !playing);
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
   });
 })();
+
+// ── FEATURED DISHES DATA ─────────────────
+const FEATURED = [
+  { id: 'fd1', name: 'Saffron Risotto', desc: 'Arborio rice, Parmigiano-Reggiano, 24-carat gold leaf, truffle oil', price: 1850, tag: 'Signature', img: 'https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=600&q=80' },
+  { id: 'fd2', name: 'Wagyu Tenderloin', desc: 'A5 grade, served with bone marrow butter and heritage vegetables', price: 4200, tag: 'Chef\'s Special', img: 'https://images.unsplash.com/photo-1558030006-450675393462?w=600&q=80' },
+  { id: 'fd3', name: 'Lobster Bisque', desc: 'Scottish lobster, cognac cream, caviar, brioche croutons', price: 2200, tag: 'Seasonal', img: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600&q=80' },
+];
+
+const grid = document.getElementById('featuredDishes');
+grid.innerHTML = FEATURED.map(d => `
+  <div class="dish-card animate-in">
+    <div class="dish-img-wrap">
+      <img src="${d.img}" alt="${d.name}" loading="lazy">
+      <span class="dish-tag">${d.tag}</span>
+    </div>
+    <div class="dish-body">
+      <div class="dish-name">${d.name}</div>
+      <p class="dish-desc">${d.desc}</p>
+      <div class="dish-footer">
+        <span class="dish-price">₹${d.price.toLocaleString()}</span>
+        <button class="dish-add-btn" onclick="Cart.add({id:'${d.id}',name:'${d.name}',price:${d.price},img:'${d.img}'})">+ Add</button>
+      </div>
+    </div>
+  </div>
+`).join('');
 </script>
 </body>
 </html>

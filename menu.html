@@ -1,523 +1,410 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Menu — AURUM Fine Dining</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    /* ── Hero ── */
-    .menu-hero {
-      height: 55vh; min-height: 420px;
-      display: flex; align-items: center;
-      background: linear-gradient(160deg, #050505 0%, #100c02 100%);
-      position: relative; overflow: hidden;
-      padding: 0 5vw; padding-top: var(--nav-h);
-    }
-    .menu-hero::after {
-      content: '';
-      position: absolute; bottom: 0; left: 5vw; right: 5vw;
-      height: 1px; background: var(--border);
-    }
-    .menu-hero-bg {
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse 70% 60% at 70% 80%, rgba(201,168,76,0.07) 0%, transparent 70%);
-    }
-    .menu-hero-title { font-family: var(--font-display); font-size: clamp(3rem,7vw,6rem); font-weight: 300; }
-    .menu-hero-title em { font-style:italic; color:var(--gold); }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Menu · Aurum Restaurant</title>
+<link rel="stylesheet" href="shared.css" />
+<style>
+/* ── MENU FILTER ── */
+.menu-section { padding: 5rem 2rem; }
+.filter-bar {
+  display: flex; gap: 0.8rem;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+  max-width: 1200px; margin: 0 auto 3rem;
+}
+.filter-btn {
+  padding: 0.5rem 1.4rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: 'Jost', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.filter-btn:hover, .filter-btn.active {
+  background: var(--gold); color: var(--black); border-color: var(--gold);
+}
 
-    /* ── Filter Tabs ── */
-    .filter-bar {
-      display: flex; gap: 0; overflow-x: auto;
-      border-bottom: 1px solid var(--border);
-      padding: 0 5vw;
-      scrollbar-width: none;
-    }
-    .filter-bar::-webkit-scrollbar { display: none; }
-    .filter-btn {
-      padding: 1.2rem 2rem;
-      font-size: 0.68rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--muted); white-space: nowrap;
-      border-bottom: 2px solid transparent;
-      transition: color 0.3s, border-color 0.3s;
-      background: none; cursor: none; border-top: none; border-left: none; border-right: none;
-    }
-    .filter-btn:hover { color: var(--gold); }
-    .filter-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+/* ── MENU GRID ── */
+.menu-grid {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.8rem;
+}
+.menu-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  transition: border-color 0.4s, transform 0.4s;
+}
+.menu-card:hover { border-color: var(--border-bright); transform: translateY(-5px); }
+.menu-card-img {
+  width: 100%; height: 200px; object-fit: cover;
+  display: block; transition: transform 0.6s;
+}
+.menu-card:hover .menu-card-img { transform: scale(1.05); }
+.menu-card-body { padding: 1.4rem; }
+.menu-card-cat {
+  font-size: 0.62rem; letter-spacing: 0.25em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 0.4rem;
+}
+.menu-card-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem; color: var(--cream);
+  margin-bottom: 0.3rem;
+}
+.menu-card-desc { font-size: 0.78rem; color: var(--text-dim); line-height: 1.55; margin-bottom: 1rem; }
+.menu-card-footer { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+.menu-card-price { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--gold); }
+.menu-card-actions { display: flex; gap: 0.5rem; }
+.view3d-btn {
+  padding: 0.45rem 0.8rem;
+  background: transparent;
+  border: 1px solid var(--border-bright);
+  color: var(--text-dim);
+  font-size: 0.65rem; letter-spacing: 0.1em;
+  font-family: 'Jost', sans-serif;
+  cursor: pointer; transition: all 0.3s;
+}
+.view3d-btn:hover { border-color: var(--gold); color: var(--gold); }
+.add-btn {
+  padding: 0.45rem 1rem;
+  background: var(--gold); color: var(--black);
+  border: none; font-size: 0.7rem;
+  font-family: 'Jost', sans-serif;
+  letter-spacing: 0.1em; cursor: pointer;
+  transition: all 0.3s;
+}
+.add-btn:hover { background: var(--gold-light); }
 
-    /* ── Menu Grid ── */
-    .menu-body { padding: 5rem 5vw 8rem; }
-    .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5px; background: var(--border);
-    }
-    @media (max-width: 900px) { .menu-grid { grid-template-columns: 1fr 1fr; } }
-    @media (max-width: 560px) { .menu-grid { grid-template-columns: 1fr; } }
-    .menu-item {
-      background: var(--card);
-      position: relative; overflow: hidden;
-      cursor: none;
-      transition: transform 0.4s var(--ease);
-    }
-    .menu-item:hover { z-index: 2; }
-    .menu-item-img {
-      position: relative; aspect-ratio: 4/3; overflow: hidden;
-    }
-    .menu-item-img img {
-      width: 100%; height: 100%; object-fit: cover;
-      transition: transform 0.7s var(--ease);
-    }
-    .menu-item:hover .menu-item-img img { transform: scale(1.08); }
-    .menu-item-img-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(0deg, rgba(5,5,5,0.5) 0%, transparent 60%);
-    }
-    .menu-item-badge {
-      position: absolute; top: 1rem; left: 1rem;
-      font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
-      background: var(--gold); color: var(--black);
-      padding: 0.3rem 0.7rem; font-weight: 600;
-    }
-    .veg-badge {
-      position: absolute; top: 1rem; right: 1rem;
-      width: 22px; height: 22px; border-radius: 3px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.55rem; font-weight: 700;
-    }
-    .veg-badge.veg { border: 2px solid #4caf50; color: #4caf50; background: rgba(76,175,80,0.1); }
-    .veg-badge.nonveg { border: 2px solid #f44336; color: #f44336; background: rgba(244,67,54,0.1); }
-    .menu-item-info { padding: 1.5rem 1.8rem 2rem; }
-    .menu-item-cat { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
-    .menu-item-name { font-family: var(--font-display); font-size: 1.35rem; font-weight: 500; }
-    .menu-item-desc { font-size: 0.75rem; color: var(--muted); margin-top: 0.5rem; line-height: 1.8; }
-    .menu-item-footer {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-top: 1.3rem;
-    }
-    .menu-item-price { font-family: var(--font-display); font-size: 1.5rem; font-weight: 400; color: var(--gold); }
-    .menu-item-price small { font-size: 0.7rem; color: var(--muted); font-family: var(--font-body); }
-    .btn-3d {
-      font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500;
-      color: var(--gold); border: 1px solid var(--border);
-      padding: 0.5rem 1rem; background: none; cursor: none;
-      transition: all 0.3s;
-    }
-    .btn-3d:hover { background: rgba(201,168,76,0.1); border-color: var(--gold); }
+/* ── 3D MODAL ── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 1000;
+  display: none; align-items: center; justify-content: center;
+  padding: 1rem;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: var(--deep);
+  border: 1px solid var(--border);
+  width: 100%; max-width: 820px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: fadeUp 0.4s ease;
+}
+.modal-close {
+  position: absolute; top: 1rem; right: 1rem;
+  background: none; border: none; color: var(--text-dim);
+  font-size: 1.5rem; cursor: pointer; z-index: 10;
+  transition: color 0.3s;
+}
+.modal-close:hover { color: var(--gold); }
+.modal-inner {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+@media(max-width:640px){ .modal-inner { grid-template-columns: 1fr; } }
 
-    /* ── 3D Modal ── */
-    .modal-backdrop {
-      position: fixed; inset: 0; z-index: 5000;
-      background: rgba(0,0,0,0.88);
-      backdrop-filter: blur(12px);
-      display: flex; align-items: center; justify-content: center;
-      padding: 1rem;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.4s var(--ease);
-    }
-    .modal-backdrop.open { opacity: 1; pointer-events: auto; }
-    .modal-box {
-      background: var(--card);
-      border: 1px solid var(--border);
-      max-width: 960px; width: 100%;
-      max-height: 92vh; overflow-y: auto;
-      position: relative;
-      display: grid; grid-template-columns: 1fr 1fr;
-      transform: translateY(30px) scale(0.97);
-      transition: transform 0.4s var(--ease);
-      scrollbar-width: thin;
-    }
-    .modal-backdrop.open .modal-box { transform: translateY(0) scale(1); }
-    @media (max-width: 680px) { .modal-box { grid-template-columns: 1fr; } }
-    .modal-canvas-wrap {
-      background: #0a0804;
-      position: relative; min-height: 320px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    #modal-canvas { display: block; }
-    .modal-close {
-      position: absolute; top: 1rem; right: 1rem; z-index: 10;
-      width: 36px; height: 36px; border-radius: 50%;
-      border: 1px solid var(--border); background: rgba(5,5,5,0.85);
-      color: var(--text); font-size: 1.2rem;
-      display: flex; align-items: center; justify-content: center;
-      cursor: none; transition: all 0.3s;
-    }
-    .modal-close:hover { border-color: var(--gold); color: var(--gold); }
-    .modal-info { padding: 3rem 2.5rem; display: flex; flex-direction: column; justify-content: space-between; }
-    .modal-cat { font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); }
-    .modal-name { font-family: var(--font-display); font-size: 2rem; font-weight: 500; margin-top: 0.4rem; line-height: 1.2; }
-    .modal-desc { font-size: 0.8rem; color: var(--muted); margin-top: 1rem; line-height: 1.9; }
-    .modal-meta { margin-top: 1.5rem; display: flex; gap: 1.5rem; flex-wrap: wrap; }
-    .modal-meta-item { text-align: center; }
-    .modal-meta-val { font-family: var(--font-display); font-size: 1.3rem; color: var(--gold); }
-    .modal-meta-label { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-top: 0.2rem; }
-    .modal-ingredients { margin-top: 1.5rem; }
-    .modal-ingredients-title { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem; }
-    .modal-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .modal-tag {
-      font-size: 0.65rem; letter-spacing: 0.1em;
-      border: 1px solid var(--border); color: var(--muted);
-      padding: 0.3rem 0.7rem;
-    }
-    .modal-order { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
-    .modal-price { font-family: var(--font-display); font-size: 2.2rem; color: var(--gold); margin-bottom: 1.2rem; }
-    .qty-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem; }
-    .qty-btn {
-      width: 36px; height: 36px; border: 1px solid var(--border);
-      background: none; color: var(--text); font-size: 1.2rem;
-      display: flex; align-items: center; justify-content: center;
-      cursor: none; transition: all 0.3s;
-    }
-    .qty-btn:hover { border-color: var(--gold); color: var(--gold); }
-    .qty-num { font-family: var(--font-display); font-size: 1.5rem; min-width: 30px; text-align: center; }
+#foodCanvas3D {
+  width: 100%; aspect-ratio: 1;
+  display: block; background: var(--card);
+}
+.modal-info { padding: 2rem; display: flex; flex-direction: column; gap: 1rem; }
+.modal-cat { font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); }
+.modal-name { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--cream); line-height: 1.2; }
+.modal-price { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: var(--gold); }
+.modal-ingredients { font-size: 0.8rem; color: var(--text-dim); line-height: 1.6; }
+.modal-calories { font-size: 0.75rem; color: var(--text-dim); }
+.modal-calories span { color: var(--gold); font-size: 1rem; font-family: 'Cormorant Garamond', serif; }
 
-    /* ── Spin hint ── */
-    .spin-hint {
-      position: absolute; bottom: 1rem; left: 50%; transform: translateX(-50%);
-      font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted);
-      display: flex; align-items: center; gap: 0.4rem;
-    }
-  </style>
+.modal-divider { height: 1px; background: var(--border); }
+
+.modal-qty-row { display: flex; align-items: center; gap: 1rem; }
+.modal-qty-label { font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); }
+.qty-controls { display: flex; align-items: center; gap: 0.6rem; }
+.modal-add-btn {
+  width: 100%; padding: 1rem;
+  background: var(--gold); color: var(--black);
+  border: none; font-family: 'Cinzel', serif;
+  font-size: 0.8rem; letter-spacing: 0.2em;
+  text-transform: uppercase; cursor: pointer;
+  transition: all 0.3s; margin-top: auto;
+}
+.modal-add-btn:hover { background: var(--gold-light); }
+</style>
 </head>
 <body>
-<div id="cursor"></div>
-<div id="cursor-ring"></div>
-<div id="toast"></div>
 
-<nav id="navbar">
-  <a href="index.html" class="nav-logo">AURUM<span> Fine Dining</span></a>
-  <ul class="nav-links" id="nav-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="about.html">About</a></li>
-    <li><a href="menu.html">Menu</a></li>
-    <li><a href="contact.html">Contact</a></li>
-  </ul>
-  <a href="cart.html" class="nav-cart-btn">Cart <span class="cart-count">0</span></a>
-  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
-</nav>
+<script src="nav-template.js"></script>
 
-<!-- Menu Hero -->
-<div class="menu-hero">
-  <div class="menu-hero-bg"></div>
-  <div style="position:relative;z-index:1;padding-top:2rem;">
-    <p class="section-label">Culinary Artistry</p>
-    <div class="gold-line left"></div>
-    <h1 class="menu-hero-title">Our <em>Menu</em></h1>
-    <p style="color:var(--muted);font-size:.82rem;margin-top:1rem;letter-spacing:.08em;">Seasonal. Intentional. Extraordinary.</p>
-  </div>
+<div class="page-hero">
+  <p class="section-label">Culinary Artistry</p>
+  <h1 class="section-title">The Menu</h1>
+  <div class="gold-line" style="justify-content:center"><span>✦</span></div>
+  <p style="color:var(--text-dim);font-size:0.85rem">
+    All prices in INR · GST inclusive · Menu changes seasonally
+  </p>
 </div>
 
-<!-- Filter Bar -->
-<div class="filter-bar">
-  <button class="filter-btn active" data-cat="all">All</button>
-  <button class="filter-btn" data-cat="Starters">Starters</button>
-  <button class="filter-btn" data-cat="Main Course">Main Course</button>
-  <button class="filter-btn" data-cat="Seafood">Seafood</button>
-  <button class="filter-btn" data-cat="Desserts">Desserts</button>
-  <button class="filter-btn" data-cat="Beverages">Beverages</button>
-</div>
+<section class="menu-section">
+  <div class="filter-bar" id="filterBar"></div>
+  <div class="menu-grid" id="menuGrid"></div>
+</section>
 
-<!-- Menu Grid -->
-<div class="menu-body">
-  <div class="menu-grid" id="menu-grid"></div>
-</div>
-
-<!-- 3D Modal -->
-<div class="modal-backdrop" id="modal-backdrop">
-  <div class="modal-box">
-    <div class="modal-canvas-wrap">
-      <canvas id="modal-canvas"></canvas>
-      <div class="spin-hint">↻ Drag to rotate</div>
-    </div>
-    <div class="modal-info">
-      <div>
-        <div class="modal-cat" id="m-cat"></div>
-        <div class="modal-name" id="m-name"></div>
-        <div class="modal-desc" id="m-desc"></div>
-        <div class="modal-meta">
-          <div class="modal-meta-item"><div class="modal-meta-val" id="m-cal"></div><div class="modal-meta-label">Calories</div></div>
-          <div class="modal-meta-item"><div class="modal-meta-val" id="m-prep"></div><div class="modal-meta-label">Prep Time</div></div>
-          <div class="modal-meta-item"><div class="modal-meta-val" id="m-serve"></div><div class="modal-meta-label">Serves</div></div>
-        </div>
-        <div class="modal-ingredients">
-          <div class="modal-ingredients-title">Key Ingredients</div>
-          <div class="modal-tags" id="m-tags"></div>
-        </div>
-      </div>
-      <div class="modal-order">
-        <div class="modal-price" id="m-price"></div>
-        <div class="qty-row">
-          <button class="qty-btn" id="qty-minus">−</button>
-          <div class="qty-num" id="qty-num">1</div>
-          <button class="qty-btn" id="qty-plus">+</button>
-          <span style="font-size:.7rem;color:var(--muted);letter-spacing:.1em;">Quantity</span>
-        </div>
-        <button class="btn-gold" id="add-to-cart-btn" style="width:100%;">Add to Cart</button>
-      </div>
-    </div>
-    <button class="modal-close" id="modal-close">✕</button>
-  </div>
-</div>
-
-<!-- Footer -->
 <footer>
-  <div class="footer-grid">
-    <div>
-      <div class="footer-brand-name">AURUM</div>
-      <div class="footer-tagline">Fine Dining · Mumbai</div>
-      <p class="footer-desc">Where every evening becomes a story worth telling.</p>
-    </div>
-    <div>
-      <div class="footer-col-title">Navigation</div>
-      <ul class="footer-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="menu.html">Menu</a></li>
-        <li><a href="cart.html">Cart</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </div>
-    <div><div class="footer-col-title">Cuisine</div>
-      <ul class="footer-links">
-        <li><a href="#">Starters</a></li>
-        <li><a href="#">Main Course</a></li>
-        <li><a href="#">Seafood</a></li>
-        <li><a href="#">Desserts</a></li>
-      </ul>
-    </div>
-    <div>
-      <div class="footer-col-title">Contact</div>
-      <div class="footer-contact-item"><span class="footer-contact-icon">📍</span><span>14 Marine Drive, Mumbai 400020</span></div>
-      <div class="footer-contact-item"><span class="footer-contact-icon">📞</span><span>+91 98765 43210</span></div>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p class="footer-copy">© 2025 AURUM Fine Dining. All rights reserved.</p>
-    <p class="footer-credit">Crafted by <a href="https://knightdevelopment.space/" target="_blank" rel="noopener">Knight Development</a></p>
-  </div>
+  <p>© 2025 Aurum Restaurant · All Rights Reserved</p>
+  <p style="margin-top:0.5rem">Crafted by <a href="https://knightdevelopment.space/" target="_blank">Knight Development</a></p>
 </footer>
 
+<!-- 3D MODAL -->
+<div class="modal-overlay" id="modal3D">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div class="modal-inner">
+      <canvas id="foodCanvas3D"></canvas>
+      <div class="modal-info">
+        <p class="modal-cat" id="mCat"></p>
+        <h2 class="modal-name" id="mName"></h2>
+        <p class="modal-price" id="mPrice"></p>
+        <div class="modal-divider"></div>
+        <p class="modal-ingredients" id="mIngredients"></p>
+        <p class="modal-calories">Calories: <span id="mCalories"></span> kcal</p>
+        <div class="modal-divider"></div>
+        <div class="modal-qty-row">
+          <span class="modal-qty-label">Quantity</span>
+          <div class="qty-controls">
+            <button class="qty-btn" id="modalQtyMinus">−</button>
+            <span class="qty-display" id="modalQtyDisplay">1</span>
+            <button class="qty-btn" id="modalQtyPlus">+</button>
+          </div>
+        </div>
+        <button class="modal-add-btn" id="modalAddBtn">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="main.js"></script>
+<script src="shared.js"></script>
 <script>
-const MENU_ITEMS = [
-  { id: 1, cat: 'Starters', name: 'Foie Gras Torchon', desc: 'Silky duck liver terrine with port wine gelée, brioche toast, and microgreens. A luxurious opener that sets the tone for the evening.', price: 1800, cal: '320 kcal', prep: '48 hrs', serve: '1', ingredients: ['Duck Liver', 'Port Wine', 'Brioche', 'Microgreens', 'Truffle Oil'], img: 'https://images.unsplash.com/photo-1484980972926-edee96e0960d?w=500&q=80', veg: false, badge: 'Chef\'s Pick' },
-  { id: 2, cat: 'Starters', name: 'Burrata & Heritage Tomato', desc: 'House-made burrata with heirloom tomatoes, fresh basil oil, aged balsamic, and Himalayan pink salt flakes.', price: 1200, cal: '280 kcal', prep: '20 min', serve: '2', ingredients: ['Burrata', 'Heirloom Tomato', 'Basil', 'Aged Balsamic', 'Salt Flakes'], img: 'https://images.unsplash.com/photo-1541014741259-de529411b96a?w=500&q=80', veg: true, badge: '' },
-  { id: 3, cat: 'Starters', name: 'Wagyu Tartare', desc: 'A5 Wagyu beef hand-cut and seasoned with shallots, capers, Dijon, and egg yolk. Served with bone marrow toast.', price: 2600, cal: '410 kcal', prep: '30 min', serve: '1', ingredients: ['A5 Wagyu', 'Shallots', 'Capers', 'Dijon', 'Bone Marrow'], img: 'https://images.unsplash.com/photo-1558030006-450675393462?w=500&q=80', veg: false, badge: 'Signature' },
-  { id: 4, cat: 'Main Course', name: 'Black Truffle Risotto', desc: 'Aged Arborio rice slow-cooked in Barolo wine with Périgord black truffle, Grana Padano, and winter herbs.', price: 2400, cal: '580 kcal', prep: '35 min', serve: '1', ingredients: ['Arborio Rice', 'Black Truffle', 'Barolo Wine', 'Grana Padano', 'Winter Herbs'], img: 'https://images.unsplash.com/photo-1559847844-5315695dadae?w=500&q=80', veg: true, badge: 'Most Loved' },
-  { id: 5, cat: 'Main Course', name: 'Rack of Lamb', desc: 'New Zealand lamb rack herb-crusted and roasted to blush, served with ratatouille, jus de veau, and rosemary infused potatoes.', price: 3800, cal: '720 kcal', prep: '45 min', serve: '1', ingredients: ['Lamb Rack', 'Herb Crust', 'Ratatouille', 'Jus de Veau', 'Rosemary'], img: 'https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=500&q=80', veg: false, badge: '' },
-  { id: 6, cat: 'Main Course', name: 'Mushroom Wellington', desc: 'Portobello and duxelles wrapped in golden puff pastry, served with truffle jus, wilted spinach, and parsnip purée.', price: 2200, cal: '650 kcal', prep: '50 min', serve: '1', ingredients: ['Portobello', 'Duxelles', 'Puff Pastry', 'Truffle Jus', 'Parsnip'], img: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=500&q=80', veg: true, badge: '' },
-  { id: 7, cat: 'Seafood', name: 'Lobster Thermidor', desc: 'Whole Canadian lobster flambéed in cognac, bathed in a rich gruyère cream sauce, and finished under the broiler.', price: 4800, cal: '620 kcal', prep: '40 min', serve: '1', ingredients: ['Canadian Lobster', 'Cognac', 'Gruyère', 'Cream', 'Tarragon'], img: 'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=500&q=80', veg: false, badge: 'Premium' },
-  { id: 8, cat: 'Seafood', name: 'Miso Glazed Black Cod', desc: 'Nobu-style black cod marinated 72 hours in Saikyo white miso, broiled to lacquered perfection, with pickled ginger and dashi.', price: 3200, cal: '460 kcal', prep: '72 hrs', serve: '1', ingredients: ['Black Cod', 'Saikyo Miso', 'Sake', 'Mirin', 'Pickled Ginger'], img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=500&q=80', veg: false, badge: 'Signature' },
-  { id: 9, cat: 'Seafood', name: 'Scallop Saint-Jacques', desc: 'Pan-seared hand-dived scallops on cauliflower velouté with crispy capers, brown butter, and caviar.', price: 2800, cal: '380 kcal', prep: '25 min', serve: '1', ingredients: ['Hand-Dived Scallops', 'Cauliflower', 'Brown Butter', 'Capers', 'Caviar'], img: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=500&q=80', veg: false, badge: '' },
-  { id: 10, cat: 'Desserts', name: 'Gold Leaf Crème Brûlée', desc: 'Classic vanilla bean crème brûlée with a caramelised crust, topped with 24K edible gold leaf and seasonal berries.', price: 950, cal: '340 kcal', prep: '4 hrs', serve: '1', ingredients: ['Cream', 'Vanilla Bean', 'Egg Yolks', 'Gold Leaf', 'Fresh Berries'], img: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=500&q=80', veg: true, badge: '' },
-  { id: 11, cat: 'Desserts', name: 'Dark Chocolate Sphere', desc: 'A tempered 70% Valrhona chocolate sphere that melts dramatically when you pour warm salted caramel over it, revealing a hidden treasure within.', price: 1100, cal: '420 kcal', prep: '3 hrs', serve: '1', ingredients: ['Valrhona Dark Chocolate', 'Salted Caramel', 'Praline', 'Gold Dust', 'Raspberry'], img: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=500&q=80', veg: true, badge: 'Theatrical' },
-  { id: 12, cat: 'Beverages', name: 'Saffron Martini', desc: 'A shimmering cocktail of premium vodka, fresh saffron infusion, lychee liqueur, and a spray of rose water. Liquid luxury.', price: 780, cal: '190 kcal', prep: '5 min', serve: '1', ingredients: ['Premium Vodka', 'Saffron', 'Lychee Liqueur', 'Rose Water', 'Gold Dust'], img: 'https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=500&q=80', veg: true, badge: '' },
+// ── MENU DATA ──────────────────────────────────────────
+const MENU = [
+  // Appetisers
+  { id: 'm1', cat: 'Appetiser', name: 'Burrata & Heirloom Tomato', desc: 'Fresh burrata, sun-dried Bydgian tomatoes, basil oil, age balsamic', price: 890, cal: 320, img: 'https://images.unsplash.com/photo-1592417817098-8fd3d9eb14a5?w=600&q=80', ing: 'Burrata cheese, heirloom tomatoes, fresh basil, EVOO, 25-year balsamic vinegar, Maldon sea salt', color: 0xf4a261 },
+  { id: 'm2', cat: 'Appetiser', name: 'Scallop Carpaccio', desc: 'Hand-dived Scottish scallops, yuzu emulsion, tobiko, micro herbs', price: 1250, cal: 210, img: 'https://images.unsplash.com/photo-1559742811-822873691df8?w=600&q=80', ing: 'Hand-dived scallops, yuzu juice, tobiko caviar, dill, shallot vinaigrette', color: 0xfdf4dc },
+  { id: 'm3', cat: 'Appetiser', name: 'Duck Liver Parfait', desc: 'Foie gras parfait, Sauternes jelly, toasted brioche, cornichons', price: 1680, cal: 410, img: 'https://images.unsplash.com/photo-1485962398705-ef6a13c41e8f?w=600&q=80', ing: 'Duck liver, Sauternes wine, shallots, thyme, brioche, cornichons', color: 0xc8956c },
+
+  // Mains
+  { id: 'm4', cat: 'Main Course', name: 'Wagyu Tenderloin', desc: 'A5 Wagyu, truffle jus, seasonal vegetables, bone marrow butter', price: 4200, cal: 720, img: 'https://images.unsplash.com/photo-1558030006-450675393462?w=600&q=80', ing: 'A5 Japanese Wagyu, black truffle, bone marrow, seasonal root vegetables, Bordelaise sauce', color: 0x8b1a1a },
+  { id: 'm5', cat: 'Main Course', name: 'Saffron Risotto', desc: 'Carnaroli rice, Parmigiano-Reggiano DOP, truffle oil, gold leaf', price: 1850, cal: 580, img: 'https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=600&q=80', ing: 'Carnaroli rice, Parmigiano-Reggiano DOP, saffron, white wine, bone broth, unsalted butter', color: 0xf2c13e },
+  { id: 'm6', cat: 'Main Course', name: 'Wild Sea Bass', desc: 'Pan-roasted, champagne beurre blanc, caviar, sea vegetables', price: 2800, cal: 490, img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=600&q=80', ing: 'Wild sea bass, Champagne, butter, Oscietra caviar, samphire, dill', color: 0x94c6d5 },
+
+  // Desserts
+  { id: 'm7', cat: 'Dessert', name: 'Dark Chocolate Fondant', desc: 'Valrhona 72%, salted caramel core, tahitian vanilla ice cream', price: 680, cal: 520, img: 'https://images.unsplash.com/photo-1624353365286-3f8d62daad51?w=600&q=80', ing: 'Valrhona Guanaja 70% chocolate, butter, eggs, caramel, Tahitian vanilla ice cream', color: 0x3a1206 },
+  { id: 'm8', cat: 'Dessert', name: 'Crème Brûlée', desc: 'Classic vanilla, cardamom-infused cream, crisp caramel crust', price: 550, cal: 420, img: 'https://images.unsplash.com/photo-1470124182917-cc6e71b22ecc?w=600&q=80', ing: 'Heavy cream, vanilla pod, egg yolks, brown sugar, green cardamom', color: 0xe8c97a },
+  { id: 'm9', cat: 'Dessert', name: 'Mango Soufflé', desc: 'Alphonso mango, chilled mango coulis at the table', price: 720, cal: 310, img: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600&q=80', ing: 'Alphonso mango pulp, egg whites, sugar, lime zest, fresh mint', color: 0xffa826 },
+
+  // Beverages
+  { id: 'm10', cat: 'Beverage', name: 'Gold Old Fashioned', desc: 'Whisky, gold bitters, demerara, orange peel', price: 850, cal: 180, img: 'https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=600&q=80', ing: 'Premium whisky, Angostura gold bitters, demerara sugar, orange peel, ice sphere', color: 0xd4a017 },
+  { id: 'm11', cat: 'Beverage', name: 'Rose Lychee Mocktail', desc: 'Rose water, lychee, elderflower, sparkling water', price: 420, cal: 120, img: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&q=80', ing: 'Fresh lychee, rose water, elderflower cordial, sparkling water, edible rose petals', color: 0xf4a0b5 },
 ];
 
-let activeItem = null, qty = 1;
-let modalRenderer, modalScene, modalCamera, isDragging = false, prevMouse = { x: 0, y: 0 }, modelGroup;
+const CATS = ['All', ...new Set(MENU.map(i => i.cat))];
 
-// ── Render Menu ──
-function renderMenu(cat) {
-  const grid = document.getElementById('menu-grid');
-  const items = cat === 'all' ? MENU_ITEMS : MENU_ITEMS.filter(i => i.cat === cat);
+// ── FILTER BAR ──────────────────────────────────────────
+const filterBar = document.getElementById('filterBar');
+let activeCat = 'All';
+
+function renderFilters() {
+  filterBar.innerHTML = CATS.map(c => `
+    <button class="filter-btn ${c === activeCat ? 'active' : ''}" data-cat="${c}">${c}</button>
+  `).join('');
+  filterBar.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeCat = btn.dataset.cat;
+      renderFilters();
+      renderMenu();
+    });
+  });
+}
+
+function renderMenu() {
+  const items = activeCat === 'All' ? MENU : MENU.filter(i => i.cat === activeCat);
+  const grid = document.getElementById('menuGrid');
   grid.innerHTML = items.map(item => `
-    <div class="menu-item fade-up" data-id="${item.id}">
-      <div class="menu-item-img">
-        <img src="${item.img}" alt="${item.name}" loading="lazy" />
-        <div class="menu-item-img-overlay"></div>
-        ${item.badge ? `<div class="menu-item-badge">${item.badge}</div>` : ''}
-        <div class="veg-badge ${item.veg ? 'veg' : 'nonveg'}">${item.veg ? '●' : '●'}</div>
-      </div>
-      <div class="menu-item-info">
-        <div class="menu-item-cat">${item.cat}</div>
-        <div class="menu-item-name">${item.name}</div>
-        <div class="menu-item-desc">${item.desc.substring(0, 80)}…</div>
-        <div class="menu-item-footer">
-          <div class="menu-item-price">₹${item.price.toLocaleString()} <small>/ serving</small></div>
-          <button class="btn-3d" onclick="openModal(${item.id})">View in 3D</button>
+    <div class="menu-card animate-in">
+      <img class="menu-card-img" src="${item.img}" alt="${item.name}" loading="lazy">
+      <div class="menu-card-body">
+        <div class="menu-card-cat">${item.cat}</div>
+        <div class="menu-card-name">${item.name}</div>
+        <p class="menu-card-desc">${item.desc}</p>
+        <div class="menu-card-footer">
+          <span class="menu-card-price">₹${item.price.toLocaleString()}</span>
+          <div class="menu-card-actions">
+            <button class="view3d-btn" data-id="${item.id}">⬡ 3D View</button>
+            <button class="add-btn" data-id="${item.id}">+ Cart</button>
+          </div>
         </div>
       </div>
     </div>
   `).join('');
-  // Re-observe for scroll animation
-  setTimeout(() => {
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
-    }, { threshold: 0.1 });
-    grid.querySelectorAll('.fade-up').forEach(el => io.observe(el));
-  }, 50);
-}
 
-// ── Filters ──
-document.querySelectorAll('.filter-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    renderMenu(btn.dataset.cat);
+  // attach events
+  grid.querySelectorAll('.add-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = MENU.find(i => i.id === btn.dataset.id);
+      Cart.add({ id: item.id, name: item.name, price: item.price, img: item.img });
+    });
   });
-});
+  grid.querySelectorAll('.view3d-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = MENU.find(i => i.id === btn.dataset.id);
+      openModal(item);
+    });
+  });
 
-// ── Init 3D Modal Renderer ──
-function initModalRenderer() {
-  const canvas = document.getElementById('modal-canvas');
-  const wrap   = canvas.parentElement;
-  const w = wrap.offsetWidth, h = wrap.offsetHeight || 400;
-  canvas.width  = w; canvas.height = h;
-
-  if (modalRenderer) { modalRenderer.dispose(); }
-  modalRenderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  modalRenderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  modalRenderer.setSize(w, h);
-
-  modalScene = new THREE.Scene();
-  modalCamera = new THREE.PerspectiveCamera(55, w / h, 0.1, 50);
-  modalCamera.position.set(0, 0, 4);
-
-  modalScene.add(new THREE.AmbientLight(0x1a0f00, 1.5));
-  const l1 = new THREE.PointLight(0xc9a84c, 6, 15); l1.position.set(3, 3, 3); modalScene.add(l1);
-  const l2 = new THREE.PointLight(0x6699cc, 2, 10); l2.position.set(-3, -1, -2); modalScene.add(l2);
-
-  if (modalScene._animId) cancelAnimationFrame(modalScene._animId);
+  // re-run scroll animations
+  document.querySelectorAll('.animate-in').forEach(el => {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    observer.observe(el);
+  });
 }
 
-function buildModalModel(item) {
-  if (modelGroup) { modalScene.remove(modelGroup); }
-  modelGroup = new THREE.Group();
+renderFilters();
+renderMenu();
 
-  const mat = new THREE.MeshStandardMaterial({ color: 0xc9a84c, metalness: 0.9, roughness: 0.12 });
+// ── 3D MODAL ──────────────────────────────────────────
+let modalQty = 1;
+let currentModalItem = null;
+let threeScene = null, threeRenderer = null, threeAnimFrame = null;
 
-  // Unique shape per category
-  let mainMesh;
-  if (item.cat === 'Desserts') {
-    mainMesh = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 32), mat.clone());
-  } else if (item.cat === 'Seafood') {
-    mainMesh = new THREE.Mesh(new THREE.ConeGeometry(0.9, 1.8, 8), mat.clone());
-  } else if (item.cat === 'Beverages') {
-    mainMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.6, 2, 12), mat.clone());
-  } else if (item.cat === 'Starters') {
-    mainMesh = new THREE.Mesh(new THREE.DodecahedronGeometry(0.9), mat.clone());
-  } else {
-    mainMesh = new THREE.Mesh(new THREE.OctahedronGeometry(1, 1), mat.clone());
-  }
-  modelGroup.add(mainMesh);
-
-  // Plate base
-  const plateMat = new THREE.MeshStandardMaterial({ color: 0xf0ece0, metalness: 0.3, roughness: 0.5 });
-  const plate = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 0.08, 64), plateMat);
-  plate.position.y = -1.3;
-  modelGroup.add(plate);
-  const plateRim = new THREE.Mesh(new THREE.TorusGeometry(1.5, 0.05, 8, 64), plateMat.clone());
-  plateRim.rotation.x = Math.PI / 2;
-  plateRim.position.y = -1.26;
-  modelGroup.add(plateRim);
-
-  // Orbiting particles
-  const pGeo = new THREE.BufferGeometry();
-  const pArr = new Float32Array(80 * 3);
-  for (let i = 0; i < 80; i++) {
-    const a = (i / 80) * Math.PI * 2;
-    const r = 1.8 + Math.sin(i * 2.4) * 0.4;
-    pArr[i*3] = Math.cos(a) * r; pArr[i*3+1] = (Math.random()-0.5)*1.5; pArr[i*3+2] = Math.sin(a) * r;
-  }
-  pGeo.setAttribute('position', new THREE.BufferAttribute(pArr, 3));
-  const pMesh = new THREE.Points(pGeo, new THREE.PointsMaterial({ color: 0xc9a84c, size: 0.04, transparent: true, opacity: 0.7 }));
-  modelGroup.add(pMesh);
-
-  modalScene.add(modelGroup);
-
-  // Animate
-  const clock = new THREE.Clock();
-  let animId;
-  function animate() {
-    animId = requestAnimationFrame(animate);
-    const t = clock.getElapsedTime();
-    if (!isDragging) modelGroup.rotation.y = t * 0.5;
-    mainMesh.position.y = Math.sin(t * 1.2) * 0.08;
-    pMesh.rotation.y = t * 0.3;
-    modalRenderer.render(modalScene, modalCamera);
-  }
-  animate();
-  modalScene._animId = animId;
-}
-
-// ── Open Modal ──
-function openModal(id) {
-  activeItem = MENU_ITEMS.find(i => i.id === id);
-  if (!activeItem) return;
-  qty = 1;
-  document.getElementById('m-cat').textContent   = activeItem.cat;
-  document.getElementById('m-name').textContent  = activeItem.name;
-  document.getElementById('m-desc').textContent  = activeItem.desc;
-  document.getElementById('m-cal').textContent   = activeItem.cal;
-  document.getElementById('m-prep').textContent  = activeItem.prep;
-  document.getElementById('m-serve').textContent = activeItem.serve;
-  document.getElementById('m-price').textContent = `₹${activeItem.price.toLocaleString()}`;
-  document.getElementById('qty-num').textContent = 1;
-  document.getElementById('m-tags').innerHTML = activeItem.ingredients.map(i => `<span class="modal-tag">${i}</span>`).join('');
-
-  document.getElementById('modal-backdrop').classList.add('open');
+function openModal(item) {
+  currentModalItem = item;
+  modalQty = 1;
+  document.getElementById('mCat').textContent = item.cat;
+  document.getElementById('mName').textContent = item.name;
+  document.getElementById('mPrice').textContent = '₹' + item.price.toLocaleString();
+  document.getElementById('mIngredients').textContent = 'Ingredients: ' + item.ing;
+  document.getElementById('mCalories').textContent = item.cal;
+  document.getElementById('modalQtyDisplay').textContent = 1;
+  document.getElementById('modal3D').classList.add('open');
   document.body.style.overflow = 'hidden';
 
-  initModalRenderer();
-  buildModalModel(activeItem);
-
-  // Mouse drag for rotation
-  const canvas = document.getElementById('modal-canvas');
-  canvas.addEventListener('mousedown', e => { isDragging = true; prevMouse = { x: e.clientX, y: e.clientY }; });
-  window.addEventListener('mousemove', e => {
-    if (!isDragging || !modelGroup) return;
-    const dx = e.clientX - prevMouse.x, dy = e.clientY - prevMouse.y;
-    modelGroup.rotation.y += dx * 0.01;
-    modelGroup.rotation.x += dy * 0.01;
-    prevMouse = { x: e.clientX, y: e.clientY };
-  });
-  window.addEventListener('mouseup', () => isDragging = false);
-
-  canvas.addEventListener('touchstart', e => { prevMouse = { x: e.touches[0].clientX, y: e.touches[0].clientY }; isDragging = true; });
-  canvas.addEventListener('touchmove', e => {
-    if (!isDragging || !modelGroup) return;
-    const dx = e.touches[0].clientX - prevMouse.x, dy = e.touches[0].clientY - prevMouse.y;
-    modelGroup.rotation.y += dx * 0.01;
-    modelGroup.rotation.x += dy * 0.01;
-    prevMouse = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-  });
-  canvas.addEventListener('touchend', () => isDragging = false);
+  // Slight delay so canvas is visible
+  setTimeout(() => init3DModal(item.color), 50);
 }
 
 function closeModal() {
-  document.getElementById('modal-backdrop').classList.remove('open');
+  document.getElementById('modal3D').classList.remove('open');
   document.body.style.overflow = '';
-  activeItem = null;
-  if (modalScene && modalScene._animId) cancelAnimationFrame(modalScene._animId);
+  if (threeAnimFrame) cancelAnimationFrame(threeAnimFrame);
+  if (threeRenderer) { threeRenderer.dispose(); threeRenderer = null; }
 }
 
-// ── Qty ──
-document.getElementById('qty-minus').addEventListener('click', () => {
-  if (qty > 1) { qty--; document.getElementById('qty-num').textContent = qty; }
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modal3D').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
 });
-document.getElementById('qty-plus').addEventListener('click', () => {
-  qty++; document.getElementById('qty-num').textContent = qty;
+document.getElementById('modalQtyMinus').addEventListener('click', () => {
+  modalQty = Math.max(1, modalQty - 1);
+  document.getElementById('modalQtyDisplay').textContent = modalQty;
 });
-
-// ── Add to Cart ──
-document.getElementById('add-to-cart-btn').addEventListener('click', () => {
-  if (!activeItem) return;
-  Cart.add({ id: activeItem.id, name: activeItem.name, price: activeItem.price, qty, img: activeItem.img });
+document.getElementById('modalQtyPlus').addEventListener('click', () => {
+  modalQty = Math.min(10, modalQty + 1);
+  document.getElementById('modalQtyDisplay').textContent = modalQty;
+});
+document.getElementById('modalAddBtn').addEventListener('click', () => {
+  if (!currentModalItem) return;
+  Cart.add({ ...currentModalItem, qty: modalQty });
   closeModal();
 });
 
-// ── Close Modal ──
-document.getElementById('modal-close').addEventListener('click', closeModal);
-document.getElementById('modal-backdrop').addEventListener('click', e => {
-  if (e.target === e.currentTarget) closeModal();
-});
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+function init3DModal(color) {
+  const canvas = document.getElementById('foodCanvas3D');
+  const w = canvas.clientWidth || 400;
+  const h = canvas.clientHeight || 400;
 
-// ── Init ──
-renderMenu('all');
+  if (threeRenderer) { threeRenderer.dispose(); }
+  if (threeAnimFrame) cancelAnimationFrame(threeAnimFrame);
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(w, h);
+  renderer.setClearColor(0x131008, 1);
+  threeRenderer = renderer;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+  camera.position.set(0, 0.5, 4);
+
+  // Lighting
+  scene.add(new THREE.AmbientLight(0x2a1f08, 2));
+  const key = new THREE.PointLight(0xfff4e0, 3, 15);
+  key.position.set(3, 5, 3);
+  scene.add(key);
+  const fill = new THREE.PointLight(color, 1.5, 10);
+  fill.position.set(-3, -1, 2);
+  scene.add(fill);
+
+  // Plate
+  const plate = new THREE.Mesh(
+    new THREE.CylinderGeometry(1.2, 1.0, 0.1, 48),
+    new THREE.MeshStandardMaterial({ color: 0x1a1208, metalness: 0.8, roughness: 0.2 })
+  );
+  scene.add(plate);
+  // Rim
+  const rim = new THREE.Mesh(
+    new THREE.TorusGeometry(1.15, 0.04, 12, 60),
+    new THREE.MeshStandardMaterial({ color: 0xc9a84c, metalness: 0.95, roughness: 0.1 })
+  );
+  rim.rotation.x = Math.PI / 2;
+  rim.position.y = 0.05;
+  scene.add(rim);
+
+  // Food object — simple geometric representation
+  const foodGeo = new THREE.SphereGeometry(0.55, 24, 24);
+  const foodMat = new THREE.MeshStandardMaterial({ color, metalness: 0.1, roughness: 0.7 });
+  const food = new THREE.Mesh(foodGeo, foodMat);
+  food.position.y = 0.6;
+  food.scale.set(1, 0.7, 1);
+  scene.add(food);
+
+  // Decorative bits on top
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2;
+    const bit = new THREE.Mesh(
+      new THREE.SphereGeometry(0.06, 8, 8),
+      new THREE.MeshStandardMaterial({ color: 0xc9a84c, metalness: 1, roughness: 0.1 })
+    );
+    bit.position.set(Math.cos(a) * 0.3, 0.95, Math.sin(a) * 0.3);
+    scene.add(bit);
+  }
+
+  const group = new THREE.Group();
+  group.add(plate, rim, food);
+  scene.add(group);
+
+  let t = 0;
+  function animate() {
+    threeAnimFrame = requestAnimationFrame(animate);
+    t += 0.008;
+    group.rotation.y = t * 0.5;
+    food.position.y = 0.6 + Math.sin(t * 1.2) * 0.03;
+    renderer.render(scene, camera);
+  }
+  animate();
+}
 </script>
 </body>
 </html>
